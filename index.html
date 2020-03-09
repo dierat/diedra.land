@@ -1,0 +1,85 @@
+<!doctype html>
+<!--
+
+
+
+Suuuuup.
+
+
+
+-->
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+
+        <title>Diedra Rater Artist & Programmer</title>
+
+        <meta name="description" content="Diedra Rater | Artist & Programmer">
+        <meta name="author" content="Diedra Rater">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/png" href="./images/icons/favicon.png" />
+        <link rel="stylesheet" href="css/styles.css">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+
+        <!-- Load React. -->
+        <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+        <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+        <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    </head>
+
+    <body>
+        <header>
+            <nav>
+                <div class="header-name">
+                    <img aria-hidden src="./images/icons/d-signature-icon.png" class="d-signature-icon" />
+                    <div aria-hidden>
+                        iedra Rater
+                    </div>
+                    <span class="sr-only">Diedra Rater</span>
+                    <span class="header-profession">&nbsp;&nbsp;|&nbsp;&nbsp;Artist & Programmer</span>
+                </div>
+
+                <div class="header-links">
+                    <!-- TODO: Add detail pages! Until then, this link is pointless. -->
+                    <!-- <a class="header-link" href="/">Gallery</a> -->
+                    <!-- TODO: Post to blog! Until then, this link is pointless. -->
+                    <!-- <a class="header-link" href="http://dierat.blogspot.com/">Journal</a> -->
+                    <a class="header-link" href="http://dierat.deviantart.com/prints/">Prints</a>
+                    <a class="header-link" href="https://www.linkedin.com/in/dierat/">LinkedIn</a>
+                    <a class="header-link" href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=diedrarater@protonmail.com">Contact</a>
+                </div>
+
+                <button id="header-menu-button" aria-label="Navigation menu button.">
+                    <div class="menu-button-bar-1 menu-button-bar"></div>
+                    <div class="menu-button-bar-2 menu-button-bar"></div>
+                    <div class="menu-button-bar-3 menu-button-bar"></div>
+                    <div class="menu-button-backdrop"></div>
+                </button>
+            </nav>
+        </header>
+
+        <div id="menu-overlay" class="menu-closed">
+            <div class="overlay-links">
+                <!-- TODO: Add detail pages! Until then, this link is pointless. -->
+                <!-- <a class="overlay-link" href="/">Gallery</a> -->
+                <!-- TODO: Post to blog! Until then, this link is pointless. -->
+                <!-- <a class="overlay-link" href="http://dierat.blogspot.com/">Journal</a> -->
+                <a class="overlay-link" href="http://dierat.deviantart.com/prints/">Prints</a>
+                <a class="overlay-link" href="https://www.linkedin.com/in/dierat/">LinkedIn</a>
+                <a class="overlay-link" id="last-overlay-link" href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=diedrarater@protonmail.com">Contact</a>
+            </div>
+        </div>
+
+        <div id="main-content"></div>
+
+        <footer>
+            <span class="footer-text">© 2020 Diedra Rater</span>
+            <span class="footer-separator">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+            <span class="footer-text">All rights reserved</span>
+        </footer>
+
+        <script src="js/scripts.js"></script>
+    </body>
+</html>
