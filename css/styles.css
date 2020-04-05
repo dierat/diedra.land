@@ -167,15 +167,10 @@ nav {
     top: 0;
     left: 0;
     width: 100%;
-
-    /* TODO: Add/remove overlay from page before/after transition so screen readers don't pick it up. */
-    /* display: block; */
     height: 1000px;
 }
 
 #menu-overlay.menu-closed {
-    /* TODO: Add/remove overlay from page before/after transition. */
-    /* display: none; */
     height: 0;
 }
 

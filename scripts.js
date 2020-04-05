@@ -102,17 +102,143 @@ var TopLevelWrapper = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (TopLevelWrapper.__proto__ || Object.getPrototypeOf(TopLevelWrapper)).call(this, props));
 
         _this.state = {
-            mobileMenuOpen: false
+            currentPage: "gallery",
+            mobileMenuOpen: false,
+            // "active" in this case means focused/hovered.
+            mobileMenuButtonActive: false
         };
+
+        _this.componentDidMount = function () {
+            window.addEventListener("resize", function () {
+                return _this.handleMobileMenuToggle(false);
+            });
+        };
+
+        _this.handleClientNavigation = function (event, newPage) {
+            event.preventDefault();
+
+            if (newPage === _this.state.currentPage) {
+                return;
+            }
+
+            _this.setState({ currentPage: newPage });
+            // history.pushState(null, null, `${window.location.pathname}/${newPage}`);
+            _this.handleMobileMenuToggle(false);
+            _this.handleMobileMenuButtonToggle(false);
+
+            // TODO: Handle focus.
+        };
+
+        _this.handleMobileMenuButtonToggle = function (nowFocused) {
+            if (_this.state.mobileMenuButtonActive === nowFocused) {
+                return;
+            }
+
+            _this.setState({ mobileMenuButtonActive: nowFocused });
+        };
+
+        _this.handleMobileMenuToggle = function (nowOpen) {
+            if (_this.state.mobileMenuOpen === nowOpen) {
+                return;
+            }
+
+            _this.setState({ mobileMenuOpen: nowOpen });
+
+            if (nowOpen) {
+                document.body.classList.add("no-scroll");
+            } else {
+                document.body.classList.remove("no-scroll");
+            }
+        };
+
+        _this.handleMobileMenuButtonKeyUp = function (event) {
+            if (event.key === " " || event.key === "Enter") {
+                _this.handleMobileMenuToggle(!_this.state.mobileMenuOpen);
+            }
+
+            if (event.key === "Tab" && event.shiftKey) {
+                event.preventDefault();
+
+                if (_this.lastOverlayLink && _this.lastOverlayLink.focus) {
+                    _this.lastOverlayLink.focus();
+                }
+            }
+        };
+
+        _this.handleLastOverlayLinkKeyDown = function (event) {
+            if (event.key === "Tab" && !event.shiftKey) {
+                event.preventDefault();
+
+                if (_this.mobileMenuButton && _this.mobileMenuButton.focus) {
+                    _this.mobileMenuButton.focus();
+                }
+            }
+        };
+
+        _this.renderNavigationLinks = function (isHeader) {
+            var currentPage = _this.state.currentPage;
+
+            var linkClassName = isHeader ? "header-link" : "overlay-link";
+            var lastLinkRef = isHeader ? null : function (node) {
+                return _this.lastOverlayLink = node;
+            };
+
+            return React.createElement(
+                "div",
+                { className: linkClassName + "s" },
+                currentPage !== "gallery" && React.createElement(
+                    "a",
+                    { className: linkClassName, href: "", onClick: function onClick(event) {
+                            return _this.handleClientNavigation(event, "gallery");
+                        } },
+                    "Gallery"
+                ),
+                currentPage !== "blog" && React.createElement(
+                    "a",
+                    { className: linkClassName, href: "/blog", onClick: function onClick(event) {
+                            return _this.handleClientNavigation(event, "blog");
+                        } },
+                    "Blog"
+                ),
+                React.createElement(
+                    "a",
+                    { className: linkClassName, href: "http://dierat.deviantart.com/prints/" },
+                    "Prints"
+                ),
+                React.createElement(
+                    "a",
+                    { className: linkClassName, href: "https://www.linkedin.com/in/dierat/" },
+                    "LinkedIn"
+                ),
+                React.createElement(
+                    "a",
+                    {
+                        className: linkClassName,
+                        href: "https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=diedrarater@protonmail.com",
+                        onKeyDown: isHeader ? null : _this.handleLastOverlayLinkKeyDown,
+                        ref: lastLinkRef
+                    },
+                    "Contact"
+                )
+            );
+        };
+
         return _this;
     }
+
+    // Toggles the focus/hover state of the mobile menu button.
+
 
     _createClass(TopLevelWrapper, [{
         key: "render",
         value: function render() {
             var _this2 = this;
 
-            var menuButtonBarClassName = "";
+            var _state = this.state,
+                currentPage = _state.currentPage,
+                mobileMenuButtonActive = _state.mobileMenuButtonActive,
+                mobileMenuOpen = _state.mobileMenuOpen;
+
 
             return React.createElement(
                 "div",
@@ -143,78 +269,72 @@ var TopLevelWrapper = function (_React$Component) {
                                 "\xA0\xA0|\xA0\xA0Artist & Programmer"
                             )
                         ),
-                        React.createElement(
-                            "div",
-                            { className: "header-links" },
-                            React.createElement(
-                                "a",
-                                { className: "header-link", href: "http://dierat.deviantart.com/prints/" },
-                                "Prints"
-                            ),
-                            React.createElement(
-                                "a",
-                                { className: "header-link", href: "https://www.linkedin.com/in/dierat/" },
-                                "LinkedIn"
-                            ),
-                            React.createElement(
-                                "a",
-                                { className: "header-link", href: "https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=diedrarater@protonmail.com" },
-                                "Contact"
-                            )
-                        ),
+                        this.renderNavigationLinks(true),
                         React.createElement(
                             "button",
                             {
                                 id: "header-menu-button",
-                                "aria-label": "Navigation menu button.",
-                                onClick: function onClick() {
-                                    return _this2.setState({ mobileMenuOpen: !_this2.state.mobileMenuOpen });
+                                ref: function ref(node) {
+                                    return _this2.mobileMenuButton = node;
                                 },
-                                "aria-expanded": this.state.mobileMenuOpen
+                                "aria-label": mobileMenuOpen ? "Close navigation menu" : "Open navigation menu",
+                                onClick: function onClick() {
+                                    return _this2.handleMobileMenuToggle(!mobileMenuOpen);
+                                },
+                                onKeyUp: this.handleMobileMenuButtonKeyUp,
+                                onMouseEnter: function onMouseEnter() {
+                                    return _this2.handleMobileMenuButtonToggle(true);
+                                },
+                                onFocus: function onFocus() {
+                                    return _this2.handleMobileMenuButtonToggle(true);
+                                },
+                                onMouseLeave: function onMouseLeave() {
+                                    return _this2.handleMobileMenuButtonToggle(false);
+                                },
+                                onBlur: function onBlur() {
+                                    return _this2.handleMobileMenuButtonToggle(false);
+                                },
+                                "aria-expanded": mobileMenuOpen,
+                                className: mobileMenuOpen ? "change" : ""
                             },
-                            React.createElement("div", { className: "menu-button-bar-1 menu-button-bar" }),
-                            React.createElement("div", { className: "menu-button-bar-2 menu-button-bar" }),
-                            React.createElement("div", { className: "menu-button-bar-3 menu-button-bar" }),
+                            [1, 2, 3].map(function (index) {
+                                var menuButtonBarClassName = "menu-button-bar-" + index + " menu-button-bar";
+                                if (mobileMenuButtonActive) {
+                                    menuButtonBarClassName += " active";
+                                }
+
+                                return React.createElement("div", {
+                                    className: menuButtonBarClassName,
+                                    key: "menuButtonBar" + index
+                                });
+                            }),
                             React.createElement("div", { className: "menu-button-backdrop" })
-                        )
-                    )
-                ),
-                this.state.mobileMenuOpen && React.createElement(
-                    "div",
-                    { id: "menu-overlay", className: "menu-closed" },
-                    React.createElement(
-                        "div",
-                        { className: "overlay-links" },
-                        React.createElement(
-                            "a",
-                            { className: "overlay-link", href: "http://dierat.deviantart.com/prints/" },
-                            "Prints"
-                        ),
-                        React.createElement(
-                            "a",
-                            { className: "overlay-link", href: "https://www.linkedin.com/in/dierat/" },
-                            "LinkedIn"
-                        ),
-                        React.createElement(
-                            "a",
-                            { className: "overlay-link", id: "last-overlay-link", href: "https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=diedrarater@protonmail.com" },
-                            "Contact"
                         )
                     )
                 ),
                 React.createElement(
                     "div",
+                    { id: "menu-overlay", className: !mobileMenuOpen ? "menu-closed" : "" },
+                    mobileMenuOpen && this.renderNavigationLinks(false)
+                ),
+                React.createElement(
+                    "div",
                     { id: "main-content" },
-                    artInfo.map(function (info, index) {
+                    currentPage === "gallery" && artInfo.map(function (info, index) {
                         var artElementSrc = "./images/art/" + info.name + "/" + info.name + "-1x.jpg";
-                        var artElementSrcset = "\n                            ./images/art/" + info.name + "/" + info.name + "-4x.jpg 4x,\n                            ./images/art/" + info.name + "/" + info.name + "-3x.jpg 3x,\n                            ./images/art/" + info.name + "/" + info.name + "-2x.jpg 2x,\n                            ./images/art/" + info.name + "/" + info.name + "-1x.jpg 1x,\n                            ";
+                        var artElementSrcset = "\n                                ./images/art/" + info.name + "/" + info.name + "-4x.jpg 4x,\n                                ./images/art/" + info.name + "/" + info.name + "-3x.jpg 3x,\n                                ./images/art/" + info.name + "/" + info.name + "-2x.jpg 2x,\n                                ./images/art/" + info.name + "/" + info.name + "-1x.jpg 1x,\n                                ";
 
                         return React.createElement(
                             "div",
                             { className: "art-thumb-wrapper " + info.orientation, key: "art-thumb-wrapper-" + index },
                             React.createElement("img", { src: artElementSrc, srcSet: artElementSrcset, alt: info.alt, className: "art-thumb " + info.orientation })
                         );
-                    })
+                    }),
+                    currentPage === "blog" && React.createElement(
+                        "div",
+                        null,
+                        "I AM A BLOG FEAR ME"
+                    )
                 ),
                 React.createElement(
                     "footer",
@@ -244,88 +364,3 @@ var TopLevelWrapper = function (_React$Component) {
 
 var domContainer = document.querySelector('#react-mount-point');
 ReactDOM.render(reactElement(TopLevelWrapper), domContainer);
-
-/**
- * Handling the menu overlay.
- */
-var toggleMenuButtonBarsActive = function toggleMenuButtonBarsActive(newState) {
-    var headerMenuButton = document.getElementById("header-menu-button");
-    var barElements = Array.from(document.getElementsByClassName("menu-button-bar"));
-
-    var testElementClassList = barElements[0].classList;
-
-    if (newState === "active" && testElementClassList.contains("active") || newState === "inactive" && document.activeElement === headerMenuButton) {
-        // Don't toggle if we're already in the right state.
-        return;
-    }
-
-    barElements.forEach(function (barElement, index) {
-        barElement.classList.toggle("active");
-    });
-};
-
-var headerMenuButton = document.getElementById("header-menu-button");
-var focusEvents = ["focus", "mouseenter"];
-var unFocusEvents = ["blur", "mouseleave"];
-focusEvents.forEach(function (eventName, index) {
-    headerMenuButton.addEventListener(eventName, function () {
-        return toggleMenuButtonBarsActive("active");
-    });
-});
-unFocusEvents.forEach(function (eventName, index) {
-    headerMenuButton.addEventListener(eventName, function () {
-        return toggleMenuButtonBarsActive("inactive");
-    });
-});
-
-var closeMenuOverlay = function closeMenuOverlay() {
-    var menuOverlay = document.getElementById("menu-overlay");
-
-    if (menuOverlay.classList.contains("menu-closed")) {
-        return;
-    }
-
-    var hamburgerButton = document.getElementById("header-menu-button");
-
-    menuOverlay.classList.add("menu-closed");
-    document.body.classList.remove("no-scroll");
-    hamburgerButton.classList.toggle("change");
-};
-
-var toggleMenuOverlay = function toggleMenuOverlay() {
-    var menuOverlay = document.getElementById("menu-overlay");
-    var body = document.body;
-
-    if (menuOverlay.classList.contains("menu-closed")) {
-        var hamburgerButton = document.getElementById("header-menu-button");
-
-        menuOverlay.classList.remove("menu-closed");
-        document.body.classList.add("no-scroll");
-        hamburgerButton.classList.toggle("change");
-    } else {
-        closeMenuOverlay();
-    }
-};
-
-var menuButton = document.getElementById("header-menu-button");
-var lastOverlayLink = document.getElementById("last-overlay-link");
-
-menuButton.addEventListener("click", toggleMenuOverlay);
-menuButton.addEventListener("keydown", function (event) {
-    var menuOverlay = document.getElementById("menu-overlay");
-    if (!menuOverlay.classList.contains("menu-closed") && event.key === "Tab" && event.shiftKey) {
-        event.preventDefault();
-        lastOverlayLink.focus();
-    }
-});
-
-lastOverlayLink.addEventListener("keydown", function (event) {
-    if (event.key === "Tab" && !event.shiftKey) {
-        event.preventDefault();
-        menuButton.focus();
-    }
-});
-
-window.addEventListener("resize", function () {
-    return closeMenuOverlay();
-});

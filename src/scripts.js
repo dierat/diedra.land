@@ -105,11 +105,107 @@ class TopLevelWrapper extends React.Component {
     }
 
     state = {
+        currentPage: "gallery",
         mobileMenuOpen: false,
+        // "active" in this case means focused/hovered.
+        mobileMenuButtonActive: false,
+    };
+
+    componentDidMount = () => {
+        window.addEventListener("resize", () => this.handleMobileMenuToggle(false))
+    };
+
+    handleClientNavigation = (event, newPage) => {
+        event.preventDefault();
+
+        if (newPage === this.state.currentPage) {
+            return;
+        }
+
+        this.setState({currentPage: newPage});
+        // history.pushState(null, null, `${window.location.pathname}/${newPage}`);
+        this.handleMobileMenuToggle(false);
+        this.handleMobileMenuButtonToggle(false);
+
+        // TODO: Handle focus.
+    };
+
+    // Toggles the focus/hover state of the mobile menu button.
+    handleMobileMenuButtonToggle = (nowFocused) => {
+        if (this.state.mobileMenuButtonActive === nowFocused) {
+            return;
+        }
+
+        this.setState({mobileMenuButtonActive: nowFocused});
+    }
+
+    handleMobileMenuToggle = (nowOpen) => {
+        if (this.state.mobileMenuOpen === nowOpen) {
+            return;
+        }
+
+        this.setState({mobileMenuOpen: nowOpen});
+
+        if (nowOpen) {
+            document.body.classList.add("no-scroll");
+        } else {
+            document.body.classList.remove("no-scroll");
+        }
+    };
+
+    handleMobileMenuButtonKeyUp = (event) => {
+        if (event.key === " " || event.key === "Enter") {
+            this.handleMobileMenuToggle(!this.state.mobileMenuOpen);
+        }
+
+        if (event.key === "Tab" && event.shiftKey) {
+            event.preventDefault();
+
+            if (this.lastOverlayLink && this.lastOverlayLink.focus) {
+                this.lastOverlayLink.focus();
+            }
+        }
+    };
+
+    handleLastOverlayLinkKeyDown = (event) => {
+        if (event.key === "Tab" && !event.shiftKey) {
+            event.preventDefault();
+
+            if (this.mobileMenuButton && this.mobileMenuButton.focus) {
+                this.mobileMenuButton.focus();
+            }
+        }
+    };
+
+    renderNavigationLinks = (isHeader) => {
+        const {currentPage} = this.state;
+        const linkClassName = isHeader ? "header-link" : "overlay-link";
+        const lastLinkRef = isHeader ? null : (node) => this.lastOverlayLink = node;
+
+        return (
+            <div className={`${linkClassName}s`}>
+                {currentPage !== "gallery" && (
+                    <a className={linkClassName} href="" onClick={(event) => this.handleClientNavigation(event, "gallery")}>Gallery</a>
+                )}
+                {currentPage !== "blog" && (
+                    <a className={linkClassName} href="/blog" onClick={(event) => this.handleClientNavigation(event, "blog")}>Blog</a>
+                )}
+                <a className={linkClassName} href="http://dierat.deviantart.com/prints/">Prints</a>
+                <a className={linkClassName} href="https://www.linkedin.com/in/dierat/">LinkedIn</a>
+                <a
+                    className={linkClassName}
+                    href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=diedrarater@protonmail.com"
+                    onKeyDown={isHeader ? null : this.handleLastOverlayLinkKeyDown}
+                    ref={lastLinkRef}
+                >
+                    Contact
+                </a>
+            </div>
+        );
     };
 
     render() {
-        const menuButtonBarClassName = "";
+        const {currentPage, mobileMenuButtonActive, mobileMenuOpen} = this.state;
 
         return (
             <div>
@@ -124,52 +220,67 @@ class TopLevelWrapper extends React.Component {
                             <span className="header-profession">&nbsp;&nbsp;|&nbsp;&nbsp;Artist & Programmer</span>
                         </div>
 
-                        <div className="header-links">
-                            <a className="header-link" href="http://dierat.deviantart.com/prints/">Prints</a>
-                            <a className="header-link" href="https://www.linkedin.com/in/dierat/">LinkedIn</a>
-                            <a className="header-link" href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=diedrarater@protonmail.com">Contact</a>
-                        </div>
+                        {this.renderNavigationLinks(true)}
 
                         <button
                             id="header-menu-button"
-                            aria-label="Navigation menu button."
-                            onClick={() => this.setState({mobileMenuOpen: !this.state.mobileMenuOpen})}
-                            aria-expanded={this.state.mobileMenuOpen}
+                            ref={(node) => this.mobileMenuButton = node}
+                            aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+                            onClick={() => this.handleMobileMenuToggle(!mobileMenuOpen)}
+                            onKeyUp={this.handleMobileMenuButtonKeyUp}
+                            onMouseEnter={() => this.handleMobileMenuButtonToggle(true)}
+                            onFocus={() => this.handleMobileMenuButtonToggle(true)}
+                            onMouseLeave={() => this.handleMobileMenuButtonToggle(false)}
+                            onBlur={() => this.handleMobileMenuButtonToggle(false)}
+                            aria-expanded={mobileMenuOpen}
+                            className={mobileMenuOpen ? "change" : ""}
                         >
-                            <div className="menu-button-bar-1 menu-button-bar"></div>
-                            <div className="menu-button-bar-2 menu-button-bar"></div>
-                            <div className="menu-button-bar-3 menu-button-bar"></div>
+                            {[1, 2, 3].map((index) => {
+                                let menuButtonBarClassName = `menu-button-bar-${index} menu-button-bar`;
+                                if (mobileMenuButtonActive) {
+                                    menuButtonBarClassName += " active";
+                                }
+
+                                return (
+                                    <div
+                                        className={menuButtonBarClassName}
+                                        key={`menuButtonBar${index}`}
+                                    >
+                                    </div>
+                                );
+                            })}
+
                             <div className="menu-button-backdrop"></div>
                         </button>
                     </nav>
                 </header>
 
-                {this.state.mobileMenuOpen && (
-                    <div id="menu-overlay" className="menu-closed">
-                        <div className="overlay-links">
-                            <a className="overlay-link" href="http://dierat.deviantart.com/prints/">Prints</a>
-                            <a className="overlay-link" href="https://www.linkedin.com/in/dierat/">LinkedIn</a>
-                            <a className="overlay-link" id="last-overlay-link" href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=diedrarater@protonmail.com">Contact</a>
-                        </div>
-                    </div>
-                )}
+                <div id="menu-overlay" className={!mobileMenuOpen ? "menu-closed" : ""}>
+                    {mobileMenuOpen && this.renderNavigationLinks(false)}
+                </div>
 
                 <div id="main-content">
-                    {artInfo.map((info, index) => {
-                        const artElementSrc = `./images/art/${info.name}/${info.name}-1x.jpg`;
-                        const artElementSrcset = `
-                            ./images/art/${info.name}/${info.name}-4x.jpg 4x,
-                            ./images/art/${info.name}/${info.name}-3x.jpg 3x,
-                            ./images/art/${info.name}/${info.name}-2x.jpg 2x,
-                            ./images/art/${info.name}/${info.name}-1x.jpg 1x,
-                            `;
+                    {currentPage === "gallery" &&
+                        artInfo.map((info, index) => {
+                            const artElementSrc = `./images/art/${info.name}/${info.name}-1x.jpg`;
+                            const artElementSrcset = `
+                                ./images/art/${info.name}/${info.name}-4x.jpg 4x,
+                                ./images/art/${info.name}/${info.name}-3x.jpg 3x,
+                                ./images/art/${info.name}/${info.name}-2x.jpg 2x,
+                                ./images/art/${info.name}/${info.name}-1x.jpg 1x,
+                                `;
 
-                        return (
-                            <div className={`art-thumb-wrapper ${info.orientation}`} key={`art-thumb-wrapper-${index}`}>
-                                <img src={artElementSrc} srcSet={artElementSrcset} alt={info.alt} className={`art-thumb ${info.orientation}`} />
-                            </div>
-                        );
-                    })}
+                            return (
+                                <div className={`art-thumb-wrapper ${info.orientation}`} key={`art-thumb-wrapper-${index}`}>
+                                    <img src={artElementSrc} srcSet={artElementSrcset} alt={info.alt} className={`art-thumb ${info.orientation}`} />
+                                </div>
+                            );
+                        })
+                    }
+
+                    {currentPage === "blog" &&
+                        <div>I AM A BLOG FEAR ME</div>
+                    }
                 </div>
 
                 <footer>
@@ -184,101 +295,3 @@ class TopLevelWrapper extends React.Component {
 
 const domContainer = document.querySelector('#react-mount-point');
 ReactDOM.render(reactElement(TopLevelWrapper), domContainer);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/**
- * Handling the menu overlay.
- */
-const toggleMenuButtonBarsActive = (newState) => {
-    const headerMenuButton = document.getElementById("header-menu-button");
-    const barElements = Array.from(document.getElementsByClassName("menu-button-bar"));
-
-    const testElementClassList = barElements[0].classList;
-
-    if (newState === "active" && testElementClassList.contains("active") ||
-        newState === "inactive" && document.activeElement === headerMenuButton
-    ) {
-        // Don't toggle if we're already in the right state.
-        return;
-    }
-
-    barElements.forEach((barElement, index) => {
-        barElement.classList.toggle("active");
-    });
-};
-
-const headerMenuButton = document.getElementById("header-menu-button");
-const focusEvents = ["focus", "mouseenter"];
-const unFocusEvents = ["blur", "mouseleave"];
-focusEvents.forEach((eventName, index) => {
-    headerMenuButton.addEventListener(eventName, () => toggleMenuButtonBarsActive("active"))
-});
-unFocusEvents.forEach((eventName, index) => {
-    headerMenuButton.addEventListener(eventName, () => toggleMenuButtonBarsActive("inactive"))
-});
-
-const closeMenuOverlay = () => {
-    const menuOverlay = document.getElementById("menu-overlay");
-
-    if (menuOverlay.classList.contains("menu-closed")) {
-        return;
-    }
-
-    const hamburgerButton = document.getElementById("header-menu-button");
-
-    menuOverlay.classList.add("menu-closed");
-    document.body.classList.remove("no-scroll");
-    hamburgerButton.classList.toggle("change");
-};
-
-const toggleMenuOverlay = () => {
-    const menuOverlay = document.getElementById("menu-overlay");
-    const body = document.body;
-
-    if (menuOverlay.classList.contains("menu-closed")) {
-        const hamburgerButton = document.getElementById("header-menu-button");
-
-        menuOverlay.classList.remove("menu-closed");
-        document.body.classList.add("no-scroll");
-        hamburgerButton.classList.toggle("change");
-    } else {
-        closeMenuOverlay();
-    }
-};
-
-const menuButton = document.getElementById("header-menu-button");
-const lastOverlayLink = document.getElementById("last-overlay-link");
-
-menuButton.addEventListener("click", toggleMenuOverlay);
-menuButton.addEventListener("keydown", (event) => {
-    const menuOverlay = document.getElementById("menu-overlay");
-    if (!menuOverlay.classList.contains("menu-closed") && event.key === "Tab" && event.shiftKey) {
-        event.preventDefault();
-        lastOverlayLink.focus();
-    }
-});
-
-lastOverlayLink.addEventListener("keydown", (event) => {
-    if (event.key === "Tab" && !event.shiftKey) {
-        event.preventDefault();
-        menuButton.focus();
-    }
-});
-
-window.addEventListener("resize", () => closeMenuOverlay())
