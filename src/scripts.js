@@ -208,7 +208,7 @@ class TopLevelWrapper extends React.Component {
         const {currentPage, mobileMenuButtonActive, mobileMenuOpen} = this.state;
 
         return (
-            <div>
+            <React.Fragment>
                 <header>
                     <nav>
                         <div className="header-name">
@@ -288,7 +288,7 @@ class TopLevelWrapper extends React.Component {
                     <span className="footer-separator">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
                     <span className="footer-text">All rights reserved</span>
                 </footer>
-            </div>
+            </React.Fragment>
         );
     }
 }

@@ -241,7 +241,7 @@ var TopLevelWrapper = function (_React$Component) {
 
 
             return React.createElement(
-                "div",
+                React.Fragment,
                 null,
                 React.createElement(
                     "header",
