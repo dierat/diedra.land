@@ -86,9 +86,9 @@ nav {
 }
 
 @media only screen and (max-width: 600px) {
-  .header-links {
-    display: none;
-  }
+    .header-links {
+        display: none;
+    }
 }
 
 .header-name {
@@ -98,9 +98,9 @@ nav {
 /* TODO: Remove the profession text at 780px when the Gallery and Journal links
    are added to the page nav. */
 @media only screen and (max-width: 400px) {
-  .header-profession {
-    display: none;
-  }
+    .header-profession {
+        display: none;
+    }
 }
 
 /**
@@ -121,38 +121,38 @@ nav {
 }
 
 @media only screen and (min-width: 601px) {
-  #header-menu-button {
-    display: none;
-  }
+    #header-menu-button {
+        display: none;
+    }
 }
 
 .menu-button-bar {
-  width: 35px;
-  height: 5px;
-  background-color: #161616;
-  margin: 6px 0;
-  transition: 0.4s;
+    width: 35px;
+    height: 5px;
+    background-color: #161616;
+    margin: 6px 0;
+    transition: 0.4s;
 }
 
 .menu-button-bar.active {
-  background-color: #C400EB
+    background-color: #C400EB
 }
 
 /* Rotate first bar */
 .change .menu-button-bar-1 {
-  -webkit-transform: rotate(-45deg) translate(-9px, 6px) ;
-  transform: rotate(-45deg) translate(-9px, 6px) ;
+    -webkit-transform: rotate(-45deg) translate(-9px, 6px) ;
+    transform: rotate(-45deg) translate(-9px, 6px) ;
 }
 
 /* Fade out the second bar */
 .change .menu-button-bar-2 {
-  opacity: 0;
+    opacity: 0;
 }
 
 /* Rotate last bar */
 .change .menu-button-bar-3 {
-  -webkit-transform: rotate(45deg) translate(-8px, -8px) ;
-  transform: rotate(45deg) translate(-8px, -8px) ;
+    -webkit-transform: rotate(45deg) translate(-8px, -8px) ;
+    transform: rotate(45deg) translate(-8px, -8px) ;
 }
 
 /**
@@ -180,10 +180,10 @@ nav {
 }
 
 @media only screen and (min-width: 601px) {
-  #menu-overlay {
-    display: none;
-    max-height: 0;
-  }
+    #menu-overlay {
+        display: none;
+        max-height: 0;
+    }
 }
 
 .overlay-links {
@@ -211,9 +211,9 @@ nav {
 }
 
 @media only screen and (min-width: 601px) {
-  #main-content {
-    padding: 10px;
-  }
+    #main-content {
+        padding: 10px;
+    }
 }
 
 .art-thumb {
