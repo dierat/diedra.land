@@ -100,86 +100,86 @@ const artInfo = [
 const reactElement = React.createElement;
 
 class TopLevelWrapper extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+    constructor(props) {
+        super(props);
+    }
 
-  state = {
-      mobileMenuOpen: false,
-  };
+    state = {
+        mobileMenuOpen: false,
+    };
 
-  render() {
-    const menuButtonBarClassName = "";
+    render() {
+        const menuButtonBarClassName = "";
 
-    return (
-      <div>
-          <header>
-              <nav>
-                  <div className="header-name">
-                      <img aria-hidden src="./images/icons/d-signature-icon.png" className="d-signature-icon" />
-                      <div aria-hidden>iedra Rater</div>
+        return (
+            <div>
+                <header>
+                    <nav>
+                        <div className="header-name">
+                            <img aria-hidden src="./images/icons/d-signature-icon.png" className="d-signature-icon" />
+                            <div aria-hidden>iedra Rater</div>
 
-                      <span className="sr-only">Diedra Rater</span>
+                            <span className="sr-only">Diedra Rater</span>
 
-                      <span className="header-profession">&nbsp;&nbsp;|&nbsp;&nbsp;Artist & Programmer</span>
-                  </div>
+                            <span className="header-profession">&nbsp;&nbsp;|&nbsp;&nbsp;Artist & Programmer</span>
+                        </div>
 
-                  <div className="header-links">
-                      <a className="header-link" href="http://dierat.deviantart.com/prints/">Prints</a>
-                      <a className="header-link" href="https://www.linkedin.com/in/dierat/">LinkedIn</a>
-                      <a className="header-link" href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=diedrarater@protonmail.com">Contact</a>
-                  </div>
+                        <div className="header-links">
+                            <a className="header-link" href="http://dierat.deviantart.com/prints/">Prints</a>
+                            <a className="header-link" href="https://www.linkedin.com/in/dierat/">LinkedIn</a>
+                            <a className="header-link" href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=diedrarater@protonmail.com">Contact</a>
+                        </div>
 
-                  <button
-                      id="header-menu-button"
-                      aria-label="Navigation menu button."
-                      onClick={() => this.setState({mobileMenuOpen: !this.state.mobileMenuOpen})}
-                      aria-expanded={this.state.mobileMenuOpen}
-                  >
-                      <div className="menu-button-bar-1 menu-button-bar"></div>
-                      <div className="menu-button-bar-2 menu-button-bar"></div>
-                      <div className="menu-button-bar-3 menu-button-bar"></div>
-                      <div className="menu-button-backdrop"></div>
-                  </button>
-              </nav>
-          </header>
+                        <button
+                            id="header-menu-button"
+                            aria-label="Navigation menu button."
+                            onClick={() => this.setState({mobileMenuOpen: !this.state.mobileMenuOpen})}
+                            aria-expanded={this.state.mobileMenuOpen}
+                        >
+                            <div className="menu-button-bar-1 menu-button-bar"></div>
+                            <div className="menu-button-bar-2 menu-button-bar"></div>
+                            <div className="menu-button-bar-3 menu-button-bar"></div>
+                            <div className="menu-button-backdrop"></div>
+                        </button>
+                    </nav>
+                </header>
 
-          {this.state.mobileMenuOpen && (
-              <div id="menu-overlay" className="menu-closed">
-                  <div className="overlay-links">
-                      <a className="overlay-link" href="http://dierat.deviantart.com/prints/">Prints</a>
-                      <a className="overlay-link" href="https://www.linkedin.com/in/dierat/">LinkedIn</a>
-                      <a className="overlay-link" id="last-overlay-link" href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=diedrarater@protonmail.com">Contact</a>
-                  </div>
-              </div>
-          )}
+                {this.state.mobileMenuOpen && (
+                    <div id="menu-overlay" className="menu-closed">
+                        <div className="overlay-links">
+                            <a className="overlay-link" href="http://dierat.deviantart.com/prints/">Prints</a>
+                            <a className="overlay-link" href="https://www.linkedin.com/in/dierat/">LinkedIn</a>
+                            <a className="overlay-link" id="last-overlay-link" href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=diedrarater@protonmail.com">Contact</a>
+                        </div>
+                    </div>
+                )}
 
-          <div id="main-content">
-              {artInfo.map((info, index) => {
-                  const artElementSrc = `./images/art/${info.name}/${info.name}-1x.jpg`;
-                  const artElementSrcset = `
-                      ./images/art/${info.name}/${info.name}-4x.jpg 4x,
-                      ./images/art/${info.name}/${info.name}-3x.jpg 3x,
-                      ./images/art/${info.name}/${info.name}-2x.jpg 2x,
-                      ./images/art/${info.name}/${info.name}-1x.jpg 1x,
-                  `;
+                <div id="main-content">
+                    {artInfo.map((info, index) => {
+                        const artElementSrc = `./images/art/${info.name}/${info.name}-1x.jpg`;
+                        const artElementSrcset = `
+                            ./images/art/${info.name}/${info.name}-4x.jpg 4x,
+                            ./images/art/${info.name}/${info.name}-3x.jpg 3x,
+                            ./images/art/${info.name}/${info.name}-2x.jpg 2x,
+                            ./images/art/${info.name}/${info.name}-1x.jpg 1x,
+                            `;
 
-                  return (
-                      <div className={`art-thumb-wrapper ${info.orientation}`} key={`art-thumb-wrapper-${index}`}>
-                        <img src={artElementSrc} srcSet={artElementSrcset} alt={info.alt} className={`art-thumb ${info.orientation}`} />
-                      </div>
-                  );
-              })}
-          </div>
+                        return (
+                            <div className={`art-thumb-wrapper ${info.orientation}`} key={`art-thumb-wrapper-${index}`}>
+                                <img src={artElementSrc} srcSet={artElementSrcset} alt={info.alt} className={`art-thumb ${info.orientation}`} />
+                            </div>
+                        );
+                    })}
+                </div>
 
-          <footer>
-              <span className="footer-text">© 2020 Diedra Rater</span>
-              <span className="footer-separator">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-              <span className="footer-text">All rights reserved</span>
-          </footer>
-      </div>
-    );
-  }
+                <footer>
+                    <span className="footer-text">© 2020 Diedra Rater</span>
+                    <span className="footer-separator">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+                    <span className="footer-text">All rights reserved</span>
+                </footer>
+            </div>
+        );
+    }
 }
 
 const domContainer = document.querySelector('#react-mount-point');
@@ -221,7 +221,6 @@ const toggleMenuButtonBarsActive = (newState) => {
     barElements.forEach((barElement, index) => {
         barElement.classList.toggle("active");
     });
-
 };
 
 const headerMenuButton = document.getElementById("header-menu-button");

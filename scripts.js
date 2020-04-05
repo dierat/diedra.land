@@ -207,7 +207,7 @@ var TopLevelWrapper = function (_React$Component) {
                     { id: "main-content" },
                     artInfo.map(function (info, index) {
                         var artElementSrc = "./images/art/" + info.name + "/" + info.name + "-1x.jpg";
-                        var artElementSrcset = "\n                      ./images/art/" + info.name + "/" + info.name + "-4x.jpg 4x,\n                      ./images/art/" + info.name + "/" + info.name + "-3x.jpg 3x,\n                      ./images/art/" + info.name + "/" + info.name + "-2x.jpg 2x,\n                      ./images/art/" + info.name + "/" + info.name + "-1x.jpg 1x,\n                  ";
+                        var artElementSrcset = "\n                            ./images/art/" + info.name + "/" + info.name + "-4x.jpg 4x,\n                            ./images/art/" + info.name + "/" + info.name + "-3x.jpg 3x,\n                            ./images/art/" + info.name + "/" + info.name + "-2x.jpg 2x,\n                            ./images/art/" + info.name + "/" + info.name + "-1x.jpg 1x,\n                            ";
 
                         return React.createElement(
                             "div",
