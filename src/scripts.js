@@ -1,5 +1,7 @@
 'use strict';
 
+import {Stylesheet, css} from "aphrodite";
+
 /**
  * Setting up the gallery.
  *
@@ -71,6 +73,11 @@ const artInfo = [
         alt: "Digital drawing of a metal pitcher and a lemon sitting on some half-transparent cloth.",
     },
     {
+        name: "pigeon-study",
+        orientation: "square",
+        alt: "Digital black and white drawing of a pigeon walking on a railing with trees in the background.",
+    },
+    {
         name: "pumpkin-study",
         orientation: "horizontal",
         alt: "Digital drawing of a fat orange pumpkin.",
@@ -97,14 +104,13 @@ const artInfo = [
     },
 ];
 
-const reactElement = React.createElement;
-
 class TopLevelWrapper extends React.Component {
     constructor(props) {
         super(props);
     }
 
     state = {
+        // TODO: Update page title when currentPage changes.
         currentPage: "gallery",
         mobileMenuOpen: false,
         // "active" in this case means focused/hovered.
@@ -293,5 +299,10 @@ class TopLevelWrapper extends React.Component {
     }
 }
 
+const styles = Stylesheet.create({
+
+});
+
 const domContainer = document.querySelector('#react-mount-point');
+const reactElement = React.createElement;
 ReactDOM.render(reactElement(TopLevelWrapper), domContainer);

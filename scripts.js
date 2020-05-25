@@ -1,5 +1,15 @@
 'use strict';
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+import { Stylesheet, css } from "aphrodite";
+
 /**
  * Setting up the gallery.
  *
@@ -24,15 +34,6 @@
  * 2400 x 1800 (horizontal)
  * 2400 x 2400 (square)
  */
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
 var artInfo = [{
     name: "nine-of-swords",
     orientation: "vertical",
@@ -70,6 +71,10 @@ var artInfo = [{
     orientation: "vertical",
     alt: "Digital drawing of a metal pitcher and a lemon sitting on some half-transparent cloth."
 }, {
+    name: "pigeon-study",
+    orientation: "square",
+    alt: "Digital black and white drawing of a pigeon walking on a railing with trees in the background."
+}, {
     name: "pumpkin-study",
     orientation: "horizontal",
     alt: "Digital drawing of a fat orange pumpkin."
@@ -91,8 +96,6 @@ var artInfo = [{
     alt: "Digital drawing of two women in a lake. One woman has hair that is part clouds and has a tattoo on her back with two swallows. She is seated on a log above the water. The other woman is standing in the water, her hair looks like a waterfall, and she has a back tattoo featuring two koi fish. She is reaching out to the first woman, who does not reach out back."
 }];
 
-var reactElement = React.createElement;
-
 var TopLevelWrapper = function (_React$Component) {
     _inherits(TopLevelWrapper, _React$Component);
 
@@ -102,6 +105,7 @@ var TopLevelWrapper = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (TopLevelWrapper.__proto__ || Object.getPrototypeOf(TopLevelWrapper)).call(this, props));
 
         _this.state = {
+            // TODO: Update page title when currentPage changes.
             currentPage: "gallery",
             mobileMenuOpen: false,
             // "active" in this case means focused/hovered.
@@ -362,5 +366,8 @@ var TopLevelWrapper = function (_React$Component) {
     return TopLevelWrapper;
 }(React.Component);
 
+var styles = Stylesheet.create({});
+
 var domContainer = document.querySelector('#react-mount-point');
+var reactElement = React.createElement;
 ReactDOM.render(reactElement(TopLevelWrapper), domContainer);
