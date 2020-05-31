@@ -10,95 +10,147 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 import artInfo from "./gallery-image-list.js";
 
-var TopLevelWrapper = function (_React$Component) {
-    _inherits(TopLevelWrapper, _React$Component);
+var GalleryImage = function (_React$Component) {
+    _inherits(GalleryImage, _React$Component);
 
-    function TopLevelWrapper(props) {
+    function GalleryImage() {
+        var _ref;
+
+        var _temp, _this, _ret;
+
+        _classCallCheck(this, GalleryImage);
+
+        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+        }
+
+        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = GalleryImage.__proto__ || Object.getPrototypeOf(GalleryImage)).call.apply(_ref, [this].concat(args))), _this), _this._mounted = false, _this.state = {
+            loading: true
+        }, _this.componentDidMount = function () {
+            _this._mounted = true;
+        }, _this.onImageLoad = function () {
+            if (_this._mounted) {
+                _this.setState({ loading: false });
+            }
+        }, _temp), _possibleConstructorReturn(_this, _ret);
+    }
+
+    _createClass(GalleryImage, [{
+        key: "render",
+        value: function render() {
+            var _props = this.props,
+                info = _props.info,
+                index = _props.index;
+            var loading = this.state.loading;
+
+
+            var artElementLoadingImage = "./images/art/" + info.name + "/" + info.name + "-0x.gif";
+            var artElementSrc = "./images/art/" + info.name + "/" + info.name + "-1x.jpg";
+            var artElementSrcset = "\n            ./images/art/" + info.name + "/" + info.name + "-4x.jpg 4x,\n            ./images/art/" + info.name + "/" + info.name + "-3x.jpg 3x,\n            ./images/art/" + info.name + "/" + info.name + "-2x.jpg 2x,\n            ./images/art/" + info.name + "/" + info.name + "-1x.jpg 1x,\n            ";
+
+            return React.createElement(
+                "div",
+                { "aria-label": info.alt, className: "art-thumb-wrapper " + info.orientation, key: "art-thumb-wrapper-" + index },
+                loading && React.createElement("img", {
+                    src: artElementLoadingImage,
+                    "aria-hidden": true,
+                    className: "art-thumb art-thumb-loading " + info.orientation
+                }),
+                React.createElement("img", {
+                    src: artElementSrc,
+                    srcSet: artElementSrcset,
+                    "aria-hidden": true,
+                    className: "art-thumb " + info.orientation + " " + (this.state.loading && "hidden"),
+                    onLoad: this.onImageLoad
+                })
+            );
+        }
+    }]);
+
+    return GalleryImage;
+}(React.Component);
+
+var TopLevelWrapper = function (_React$Component2) {
+    _inherits(TopLevelWrapper, _React$Component2);
+
+    function TopLevelWrapper() {
+        var _ref2;
+
+        var _temp2, _this2, _ret2;
+
         _classCallCheck(this, TopLevelWrapper);
 
-        var _this = _possibleConstructorReturn(this, (TopLevelWrapper.__proto__ || Object.getPrototypeOf(TopLevelWrapper)).call(this, props));
+        for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+            args[_key2] = arguments[_key2];
+        }
 
-        _this.state = {
+        return _ret2 = (_temp2 = (_this2 = _possibleConstructorReturn(this, (_ref2 = TopLevelWrapper.__proto__ || Object.getPrototypeOf(TopLevelWrapper)).call.apply(_ref2, [this].concat(args))), _this2), _this2.state = {
             // TODO: Update page title when currentPage changes.
             currentPage: "gallery",
             mobileMenuOpen: false,
             // "active" in this case means focused/hovered.
             mobileMenuButtonActive: false
-        };
-
-        _this.componentDidMount = function () {
+        }, _this2.componentDidMount = function () {
             window.addEventListener("resize", function () {
-                return _this.handleMobileMenuToggle(false);
+                return _this2.handleMobileMenuToggle(false);
             });
-        };
-
-        _this.handleClientNavigation = function (event, newPage) {
+        }, _this2.handleClientNavigation = function (event, newPage) {
             event.preventDefault();
 
-            if (newPage === _this.state.currentPage) {
+            if (newPage === _this2.state.currentPage) {
                 return;
             }
 
-            _this.setState({ currentPage: newPage });
+            _this2.setState({ currentPage: newPage });
             // history.pushState(null, null, `${window.location.pathname}/${newPage}`);
-            _this.handleMobileMenuToggle(false);
-            _this.handleMobileMenuButtonToggle(false);
+            _this2.handleMobileMenuToggle(false);
+            _this2.handleMobileMenuButtonToggle(false);
 
             // TODO: Handle focus.
-        };
-
-        _this.handleMobileMenuButtonToggle = function (nowFocused) {
-            if (_this.state.mobileMenuButtonActive === nowFocused) {
+        }, _this2.handleMobileMenuButtonToggle = function (nowFocused) {
+            if (_this2.state.mobileMenuButtonActive === nowFocused) {
                 return;
             }
 
-            _this.setState({ mobileMenuButtonActive: nowFocused });
-        };
-
-        _this.handleMobileMenuToggle = function (nowOpen) {
-            if (_this.state.mobileMenuOpen === nowOpen) {
+            _this2.setState({ mobileMenuButtonActive: nowFocused });
+        }, _this2.handleMobileMenuToggle = function (nowOpen) {
+            if (_this2.state.mobileMenuOpen === nowOpen) {
                 return;
             }
 
-            _this.setState({ mobileMenuOpen: nowOpen });
+            _this2.setState({ mobileMenuOpen: nowOpen });
 
             if (nowOpen) {
                 document.body.classList.add("no-scroll");
             } else {
                 document.body.classList.remove("no-scroll");
             }
-        };
-
-        _this.handleMobileMenuButtonKeyUp = function (event) {
+        }, _this2.handleMobileMenuButtonKeyUp = function (event) {
             if (event.key === " " || event.key === "Enter") {
-                _this.handleMobileMenuToggle(!_this.state.mobileMenuOpen);
+                _this2.handleMobileMenuToggle(!_this2.state.mobileMenuOpen);
             }
 
             if (event.key === "Tab" && event.shiftKey) {
                 event.preventDefault();
 
-                if (_this.lastOverlayLink && _this.lastOverlayLink.focus) {
-                    _this.lastOverlayLink.focus();
+                if (_this2.lastOverlayLink && _this2.lastOverlayLink.focus) {
+                    _this2.lastOverlayLink.focus();
                 }
             }
-        };
-
-        _this.handleLastOverlayLinkKeyDown = function (event) {
+        }, _this2.handleLastOverlayLinkKeyDown = function (event) {
             if (event.key === "Tab" && !event.shiftKey) {
                 event.preventDefault();
 
-                if (_this.mobileMenuButton && _this.mobileMenuButton.focus) {
-                    _this.mobileMenuButton.focus();
+                if (_this2.mobileMenuButton && _this2.mobileMenuButton.focus) {
+                    _this2.mobileMenuButton.focus();
                 }
             }
-        };
-
-        _this.renderNavigationLinks = function (isHeader) {
-            var currentPage = _this.state.currentPage;
+        }, _this2.renderNavigationLinks = function (isHeader) {
+            var currentPage = _this2.state.currentPage;
 
             var linkClassName = isHeader ? "header-link" : "overlay-link";
             var lastLinkRef = isHeader ? null : function (node) {
-                return _this.lastOverlayLink = node;
+                return _this2.lastOverlayLink = node;
             };
 
             return React.createElement(
@@ -107,14 +159,14 @@ var TopLevelWrapper = function (_React$Component) {
                 currentPage !== "gallery" && React.createElement(
                     "a",
                     { className: linkClassName, href: "", onClick: function onClick(event) {
-                            return _this.handleClientNavigation(event, "gallery");
+                            return _this2.handleClientNavigation(event, "gallery");
                         } },
                     "Gallery"
                 ),
                 currentPage !== "blog" && React.createElement(
                     "a",
                     { className: linkClassName, href: "/blog", onClick: function onClick(event) {
-                            return _this.handleClientNavigation(event, "blog");
+                            return _this2.handleClientNavigation(event, "blog");
                         } },
                     "Blog"
                 ),
@@ -133,15 +185,13 @@ var TopLevelWrapper = function (_React$Component) {
                     {
                         className: linkClassName,
                         href: "https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=diedrarater@protonmail.com",
-                        onKeyDown: isHeader ? null : _this.handleLastOverlayLinkKeyDown,
+                        onKeyDown: isHeader ? null : _this2.handleLastOverlayLinkKeyDown,
                         ref: lastLinkRef
                     },
                     "Contact"
                 )
             );
-        };
-
-        return _this;
+        }, _temp2), _possibleConstructorReturn(_this2, _ret2);
     }
 
     // Toggles the focus/hover state of the mobile menu button.
@@ -150,7 +200,7 @@ var TopLevelWrapper = function (_React$Component) {
     _createClass(TopLevelWrapper, [{
         key: "render",
         value: function render() {
-            var _this2 = this;
+            var _this3 = this;
 
             var _state = this.state,
                 currentPage = _state.currentPage,
@@ -193,24 +243,24 @@ var TopLevelWrapper = function (_React$Component) {
                             {
                                 id: "header-menu-button",
                                 ref: function ref(node) {
-                                    return _this2.mobileMenuButton = node;
+                                    return _this3.mobileMenuButton = node;
                                 },
                                 "aria-label": mobileMenuOpen ? "Close navigation menu" : "Open navigation menu",
                                 onClick: function onClick() {
-                                    return _this2.handleMobileMenuToggle(!mobileMenuOpen);
+                                    return _this3.handleMobileMenuToggle(!mobileMenuOpen);
                                 },
                                 onKeyUp: this.handleMobileMenuButtonKeyUp,
                                 onMouseEnter: function onMouseEnter() {
-                                    return _this2.handleMobileMenuButtonToggle(true);
+                                    return _this3.handleMobileMenuButtonToggle(true);
                                 },
                                 onFocus: function onFocus() {
-                                    return _this2.handleMobileMenuButtonToggle(true);
+                                    return _this3.handleMobileMenuButtonToggle(true);
                                 },
                                 onMouseLeave: function onMouseLeave() {
-                                    return _this2.handleMobileMenuButtonToggle(false);
+                                    return _this3.handleMobileMenuButtonToggle(false);
                                 },
                                 onBlur: function onBlur() {
-                                    return _this2.handleMobileMenuButtonToggle(false);
+                                    return _this3.handleMobileMenuButtonToggle(false);
                                 },
                                 "aria-expanded": mobileMenuOpen,
                                 className: mobileMenuOpen ? "change" : ""
@@ -239,14 +289,7 @@ var TopLevelWrapper = function (_React$Component) {
                     "div",
                     { id: "main-content" },
                     currentPage === "gallery" && artInfo.map(function (info, index) {
-                        var artElementSrc = "./images/art/" + info.name + "/" + info.name + "-1x.jpg";
-                        var artElementSrcset = "\n                                ./images/art/" + info.name + "/" + info.name + "-4x.jpg 4x,\n                                ./images/art/" + info.name + "/" + info.name + "-3x.jpg 3x,\n                                ./images/art/" + info.name + "/" + info.name + "-2x.jpg 2x,\n                                ./images/art/" + info.name + "/" + info.name + "-1x.jpg 1x,\n                                ";
-
-                        return React.createElement(
-                            "div",
-                            { className: "art-thumb-wrapper " + info.orientation, key: "art-thumb-wrapper-" + index },
-                            React.createElement("img", { src: artElementSrc, srcSet: artElementSrcset, alt: info.alt, className: "art-thumb " + info.orientation })
-                        );
+                        return React.createElement(GalleryImage, { info: info, index: index, key: "gallery-image-" + index });
                     }),
                     currentPage === "blog" && React.createElement(
                         "div",
