@@ -1,12 +1,12 @@
 "use strict";
 
-import artInfo from "./gallery-image-list.js";
+import {artInfo, codeInfo} from "./gallery/gallery-image-list.js";
 
 class GalleryImage extends React.Component {
     _mounted = false;
 
     state = {
-        loading: true
+        loading: true,
     };
 
     componentDidMount = () => {
@@ -281,7 +281,7 @@ class TopLevelWrapper extends React.Component {
 
                 <div id="main-content">
                     {currentPage === "code" &&
-                        artInfo.map((info, index) => (
+                        codeInfo.map((info, index) => (
                             <GalleryImage
                                 info={info}
                                 index={index}

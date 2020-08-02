@@ -81,23 +81,29 @@ const artInfo = [
     {
         name: "hands-study",
         orientation: "horizontal",
-        alt: "Digital drawing of a person seated cross-legged on a floor, wearing a skirt, with their hands in a meditative pose resting on the figure's knees. The person's shoulders and head are off-screen. The image is black and white.",
+        alt:
+            "Digital drawing of a person seated cross-legged on a floor, wearing a skirt, with their hands in a meditative pose resting on the figure's knees. The person's shoulders and head are off-screen. The image is black and white.",
     },
     {
         name: "mobster-bach",
         orientation: "square",
-        alt: "Digital drawing of composer Johann Sebastian Bach as an Italian mobster. He's wearing a suit and holding a gun in one hand and a cigar in the other. The image is a parody of the portrait by Elias Gottlob Haussmann",
+        alt:
+            "Digital drawing of composer Johann Sebastian Bach as an Italian mobster. He's wearing a suit and holding a gun in one hand and a cigar in the other. The image is a parody of the portrait by Elias Gottlob Haussmann",
     },
     {
         name: "the-lutenist",
         orientation: "vertical",
-        alt: "Digital drawing of a centaur playing a lute on the edge of a cliff with a hillside landscape in the back.",
+        alt:
+            "Digital drawing of a centaur playing a lute on the edge of a cliff with a hillside landscape in the back.",
     },
     {
         name: "sky-and-sea",
         orientation: "vertical",
-        alt: "Digital drawing of two women in a lake. One woman has hair that is part clouds and has a tattoo on her back with two swallows. She is seated on a log above the water. The other woman is standing in the water, her hair looks like a waterfall, and she has a back tattoo featuring two koi fish. She is reaching out to the first woman, who does not reach out back.",
+        alt:
+            "Digital drawing of two women in a lake. One woman has hair that is part clouds and has a tattoo on her back with two swallows. She is seated on a log above the water. The other woman is standing in the water, her hair looks like a waterfall, and she has a back tattoo featuring two koi fish. She is reaching out to the first woman, who does not reach out back.",
     },
 ];
 
-export default artInfo;
+const codeInfo = [];
+
+export {artInfo, codeInfo};
