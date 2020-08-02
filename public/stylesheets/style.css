@@ -31,6 +31,10 @@ body.no-scroll {
     overflow: hidden;
 }
 
+#react-mount-point {
+    height: 100%;
+}
+
 /* Only "visible" to screen readers. From https://webaim.org/techniques/css/invisiblecontent/ */
 .sr-only {
     position: absolute;

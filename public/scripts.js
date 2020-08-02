@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -50,7 +50,11 @@ var GalleryImage = function (_React$Component) {
 
             return React.createElement(
                 "div",
-                { "aria-label": info.alt, className: "art-thumb-wrapper " + info.orientation, key: "art-thumb-wrapper-" + index },
+                {
+                    "aria-label": info.alt,
+                    className: "art-thumb-wrapper " + info.orientation,
+                    key: "art-thumb-wrapper-" + index
+                },
                 loading && React.createElement("img", {
                     src: artElementLoadingImage,
                     "aria-hidden": true,
@@ -86,7 +90,7 @@ var TopLevelWrapper = function (_React$Component2) {
 
         return _ret2 = (_temp2 = (_this2 = _possibleConstructorReturn(this, (_ref2 = TopLevelWrapper.__proto__ || Object.getPrototypeOf(TopLevelWrapper)).call.apply(_ref2, [this].concat(args))), _this2), _this2.state = {
             // TODO: Update page title when currentPage changes.
-            currentPage: "gallery",
+            currentPage: "code",
             mobileMenuOpen: false,
             // "active" in this case means focused/hovered.
             mobileMenuButtonActive: false
@@ -156,28 +160,42 @@ var TopLevelWrapper = function (_React$Component2) {
             return React.createElement(
                 "div",
                 { className: linkClassName + "s" },
-                currentPage !== "gallery" && React.createElement(
+                currentPage !== "code" && React.createElement(
                     "a",
-                    { className: linkClassName, href: "", onClick: function onClick(event) {
-                            return _this2.handleClientNavigation(event, "gallery");
-                        } },
-                    "Gallery"
+                    {
+                        className: linkClassName,
+                        href: "",
+                        onClick: function onClick(event) {
+                            return _this2.handleClientNavigation(event, "code");
+                        }
+                    },
+                    "Code"
                 ),
-                currentPage !== "blog" && React.createElement(
+                currentPage !== "art" && React.createElement(
                     "a",
-                    { className: linkClassName, href: "/blog", onClick: function onClick(event) {
-                            return _this2.handleClientNavigation(event, "blog");
-                        } },
-                    "Blog"
+                    {
+                        className: linkClassName,
+                        href: "",
+                        onClick: function onClick(event) {
+                            return _this2.handleClientNavigation(event, "art");
+                        }
+                    },
+                    "Art"
                 ),
                 React.createElement(
                     "a",
-                    { className: linkClassName, href: "http://dierat.deviantart.com/prints/" },
+                    {
+                        className: linkClassName,
+                        href: "http://dierat.deviantart.com/prints/"
+                    },
                     "Prints"
                 ),
                 React.createElement(
                     "a",
-                    { className: linkClassName, href: "https://www.linkedin.com/in/dierat/" },
+                    {
+                        className: linkClassName,
+                        href: "https://www.linkedin.com/in/dierat/"
+                    },
                     "LinkedIn"
                 ),
                 React.createElement(
@@ -220,7 +238,11 @@ var TopLevelWrapper = function (_React$Component2) {
                         React.createElement(
                             "div",
                             { className: "header-name" },
-                            React.createElement("img", { "aria-hidden": true, src: "./images/icons/d-signature-icon.png", className: "d-signature-icon" }),
+                            React.createElement("img", {
+                                "aria-hidden": true,
+                                src: "./images/icons/d-signature-icon.png",
+                                className: "d-signature-icon"
+                            }),
                             React.createElement(
                                 "div",
                                 { "aria-hidden": true },
@@ -282,14 +304,28 @@ var TopLevelWrapper = function (_React$Component2) {
                 ),
                 React.createElement(
                     "div",
-                    { id: "menu-overlay", className: !mobileMenuOpen ? "menu-closed" : "" },
+                    {
+                        id: "menu-overlay",
+                        className: !mobileMenuOpen ? "menu-closed" : ""
+                    },
                     mobileMenuOpen && this.renderNavigationLinks(false)
                 ),
                 React.createElement(
                     "div",
                     { id: "main-content" },
-                    currentPage === "gallery" && artInfo.map(function (info, index) {
-                        return React.createElement(GalleryImage, { info: info, index: index, key: "gallery-image-" + index });
+                    currentPage === "code" && artInfo.map(function (info, index) {
+                        return React.createElement(GalleryImage, {
+                            info: info,
+                            index: index,
+                            key: "gallery-image-" + index
+                        });
+                    }),
+                    currentPage === "art" && artInfo.map(function (info, index) {
+                        return React.createElement(GalleryImage, {
+                            info: info,
+                            index: index,
+                            key: "gallery-image-" + index
+                        });
                     }),
                     currentPage === "blog" && React.createElement(
                         "div",
@@ -323,6 +359,6 @@ var TopLevelWrapper = function (_React$Component2) {
     return TopLevelWrapper;
 }(React.Component);
 
-var domContainer = document.querySelector('#react-mount-point');
+var domContainer = document.querySelector("#react-mount-point");
 var reactElement = React.createElement;
 ReactDOM.render(reactElement(TopLevelWrapper), domContainer);
