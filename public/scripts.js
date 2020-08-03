@@ -117,6 +117,7 @@ var TopLevelWrapper = function (_React$Component2) {
             _this2.handleMobileMenuButtonToggle(false);
 
             // TODO: Handle focus.
+            // TODO: Use aria alert to communicate that the contents of the page have changed.
         }, _this2.handleMobileMenuButtonToggle = function (nowFocused) {
             if (_this2.state.mobileMenuButtonActive === nowFocused) {
                 return;

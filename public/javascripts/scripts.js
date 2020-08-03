@@ -94,6 +94,7 @@ class TopLevelWrapper extends React.Component {
         this.handleMobileMenuButtonToggle(false);
 
         // TODO: Handle focus.
+        // TODO: Use aria alert to communicate that the contents of the page have changed.
     };
 
     // Toggles the focus/hover state of the mobile menu button.
