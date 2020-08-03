@@ -15,13 +15,13 @@ class GalleryImage extends React.Component {
 
     onImageLoad = () => {
         if (this._mounted) {
-            this.setState({ loading: false });
+            this.setState({loading: false});
         }
     };
 
     render() {
-        const { info, index } = this.props;
-        const { loading } = this.state;
+        const {info, index} = this.props;
+        const {loading} = this.state;
 
         const artElementLoadingImage = `./images/art/${info.name}/${info.name}-0x.gif`;
         const artElementSrc = `./images/art/${info.name}/${info.name}-1x.jpg`;
@@ -65,7 +65,7 @@ class TopLevelWrapper extends React.Component {
         currentPage: "code",
         mobileMenuOpen: false,
         // "active" in this case means focused/hovered.
-        mobileMenuButtonActive: false
+        mobileMenuButtonActive: false,
     };
 
     componentDidMount = () => {
@@ -81,7 +81,7 @@ class TopLevelWrapper extends React.Component {
             return;
         }
 
-        this.setState({ currentPage: newPage });
+        this.setState({currentPage: newPage});
         // history.pushState(null, null, `${window.location.pathname}/${newPage}`);
         this.handleMobileMenuToggle(false);
         this.handleMobileMenuButtonToggle(false);
@@ -95,7 +95,7 @@ class TopLevelWrapper extends React.Component {
             return;
         }
 
-        this.setState({ mobileMenuButtonActive: nowFocused });
+        this.setState({mobileMenuButtonActive: nowFocused});
     };
 
     handleMobileMenuToggle = nowOpen => {
@@ -103,7 +103,7 @@ class TopLevelWrapper extends React.Component {
             return;
         }
 
-        this.setState({ mobileMenuOpen: nowOpen });
+        this.setState({mobileMenuOpen: nowOpen});
 
         if (nowOpen) {
             document.body.classList.add("no-scroll");
@@ -137,7 +137,7 @@ class TopLevelWrapper extends React.Component {
     };
 
     renderNavigationLinks = isHeader => {
-        const { currentPage } = this.state;
+        const {currentPage} = this.state;
         const linkClassName = isHeader ? "header-link" : "overlay-link";
         const lastLinkRef = isHeader
             ? null
@@ -205,7 +205,7 @@ class TopLevelWrapper extends React.Component {
         const {
             currentPage,
             mobileMenuButtonActive,
-            mobileMenuOpen
+            mobileMenuOpen,
         } = this.state;
 
         return (

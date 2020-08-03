@@ -26,12 +26,14 @@ const artInfo = [
     {
         name: "nine-of-swords",
         orientation: "vertical",
-        alt: "Digital drawing of a woman in a night gown floating in space with a seascape behind her. Below her is a beach with 4 swords, hilt-up sticking out of the sand. Above her is another ocean's surface in which she is reflected. 5 swords, blade-up, stick out of the water. Behind her is a dark sea with stormy clouds reflected in both ocean surfaces, above and below her. Her expression is melancholic.",
+        alt:
+            "Digital drawing of a woman in a night gown floating in space with a seascape behind her. Below her is a beach with 4 swords, hilt-up sticking out of the sand. Above her is another ocean's surface in which she is reflected. 5 swords, blade-up, stick out of the water. Behind her is a dark sea with stormy clouds reflected in both ocean surfaces, above and below her. Her expression is melancholic.",
     },
     {
         name: "dragoness",
         orientation: "vertical",
-        alt: "Digital drawing of a woman wearing a green and red silk dress and a red and green horned headdress. In the background is a large stained glass window with an image of a unicorn and a red dragon.",
+        alt:
+            "Digital drawing of a woman wearing a green and red silk dress and a red and green horned headdress. In the background is a large stained glass window with an image of a unicorn and a red dragon.",
     },
     {
         name: "trapped-faerie",
@@ -41,12 +43,14 @@ const artInfo = [
     {
         name: "kenny-portrait",
         orientation: "vertical",
-        alt: "Digital drawing of a black and white portrait of Kenny MacKenzie from the Kenny MacKenzie Trio in a suit with his arms crossed.",
+        alt:
+            "Digital drawing of a black and white portrait of Kenny MacKenzie from the Kenny MacKenzie Trio in a suit with his arms crossed.",
     },
     {
         name: "alice",
         orientation: "vertical",
-        alt: "Digital drawing of a black and white portrait of a woman with glasses and long, straight, dark hair.",
+        alt:
+            "Digital drawing of a black and white portrait of a woman with glasses and long, straight, dark hair.",
     },
     {
         name: "lamb-study",
@@ -56,7 +60,8 @@ const artInfo = [
     {
         name: "maja",
         orientation: "vertical",
-        alt: "Digital black and white drawing of a woman standing in front of a barn.",
+        alt:
+            "Digital black and white drawing of a woman standing in front of a barn.",
     },
     {
         name: "bracelets-still-life",
@@ -66,12 +71,14 @@ const artInfo = [
     {
         name: "lemon-and-pitcher",
         orientation: "vertical",
-        alt: "Digital drawing of a metal pitcher and a lemon sitting on some half-transparent cloth.",
+        alt:
+            "Digital drawing of a metal pitcher and a lemon sitting on some half-transparent cloth.",
     },
     {
         name: "pigeon-study",
         orientation: "square",
-        alt: "Digital black and white drawing of a pigeon walking on a railing with trees in the background.",
+        alt:
+            "Digital black and white drawing of a pigeon walking on a railing with trees in the background.",
     },
     {
         name: "pumpkin-study",

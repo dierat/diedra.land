@@ -54,7 +54,8 @@ export default class GalleryImage extends React.Component {
                     src={artElementSrc}
                     srcSet={artElementSrcset}
                     aria-hidden={true}
-                    className={`art-thumb ${info.orientation} ${this.state.loading && "hidden"}`}
+                    className={`art-thumb ${info.orientation} ${this.state
+                        .loading && "hidden"}`}
                     onLoad={this.onImageLoad}
                 />
             </div>
