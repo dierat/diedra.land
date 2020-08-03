@@ -2,6 +2,13 @@
 
 import {artInfo, codeInfo} from "./gallery/gallery-image-list.js";
 
+const getCurrentPageName = () => {
+    return window.location.pathname
+        .split("")
+        .filter(string => string !== "/")
+        .join("");
+};
+
 class GalleryImage extends React.Component {
     _mounted = false;
 
@@ -61,8 +68,8 @@ class GalleryImage extends React.Component {
 
 class TopLevelWrapper extends React.Component {
     state = {
-        // TODO: Update page title when currentPage changes.
-        currentPage: "code",
+        // TODO: Update page title bsed on currentPage?
+        currentPage: getCurrentPageName(),
         mobileMenuOpen: false,
         // "active" in this case means focused/hovered.
         mobileMenuButtonActive: false,
@@ -82,7 +89,7 @@ class TopLevelWrapper extends React.Component {
         }
 
         this.setState({currentPage: newPage});
-        // history.pushState(null, null, `${window.location.pathname}/${newPage}`);
+        history.pushState(null, null, `${window.location.origin}/${newPage}/`);
         this.handleMobileMenuToggle(false);
         this.handleMobileMenuButtonToggle(false);
 

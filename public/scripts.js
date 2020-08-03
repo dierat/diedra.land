@@ -10,6 +10,12 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 import { artInfo, codeInfo } from "./gallery/gallery-image-list.js";
 
+var getCurrentPageName = function getCurrentPageName() {
+    return window.location.pathname.split("").filter(function (string) {
+        return string !== "/";
+    }).join("");
+};
+
 var GalleryImage = function (_React$Component) {
     _inherits(GalleryImage, _React$Component);
 
@@ -89,8 +95,8 @@ var TopLevelWrapper = function (_React$Component2) {
         }
 
         return _ret2 = (_temp2 = (_this2 = _possibleConstructorReturn(this, (_ref2 = TopLevelWrapper.__proto__ || Object.getPrototypeOf(TopLevelWrapper)).call.apply(_ref2, [this].concat(args))), _this2), _this2.state = {
-            // TODO: Update page title when currentPage changes.
-            currentPage: "code",
+            // TODO: Update page title bsed on currentPage?
+            currentPage: getCurrentPageName(),
             mobileMenuOpen: false,
             // "active" in this case means focused/hovered.
             mobileMenuButtonActive: false
@@ -106,7 +112,7 @@ var TopLevelWrapper = function (_React$Component2) {
             }
 
             _this2.setState({ currentPage: newPage });
-            // history.pushState(null, null, `${window.location.pathname}/${newPage}`);
+            history.pushState(null, null, window.location.origin + "/" + newPage + "/");
             _this2.handleMobileMenuToggle(false);
             _this2.handleMobileMenuButtonToggle(false);
 
