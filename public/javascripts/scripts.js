@@ -231,7 +231,7 @@ class TopLevelWrapper extends React.Component {
                             <span className="sr-only">Diedra Rater</span>
 
                             <span className="header-profession">
-                                &nbsp;&nbsp;|&nbsp;&nbsp;Artist & Programmer
+                                &nbsp;&nbsp;|&nbsp;&nbsp;Programmer & Artist
                             </span>
                         </div>
 

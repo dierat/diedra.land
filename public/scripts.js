@@ -263,7 +263,7 @@ var TopLevelWrapper = function (_React$Component2) {
                             React.createElement(
                                 "span",
                                 { className: "header-profession" },
-                                "\xA0\xA0|\xA0\xA0Artist & Programmer"
+                                "\xA0\xA0|\xA0\xA0Programmer & Artist"
                             )
                         ),
                         this.renderNavigationLinks(true),
