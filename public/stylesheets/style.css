@@ -227,18 +227,26 @@ nav {
     transition: filter 0.25s ease-out;
 }
 
-.art-thumb.hidden {
-    opacity: 0;
-    filter: blur(40px);
-}
-
 .art-thumb-loading {
     filter: blur(40px);
     position: absolute;
 }
 
+.art-thumb.hidden {
+    opacity: 0;
+    /* It's important that this has the blur on it for the purpose of animating the switch.
+       While the image has loaded, we remove the loading thumb from the page
+       and we remove the hidden className from the high res thumb. We transition the filter
+       on this thumb when this className is removed to soften the switch. */
+    filter: blur(40px);
+}
+
 /* These constraints mess up mobile. */
 @media only screen and (min-width: 601px) {
+    .art-thumb {
+        border: 1px solid #bebebe;
+    }
+
     .art-thumb.vertical {
         width: 450px;
         height: 600px;
