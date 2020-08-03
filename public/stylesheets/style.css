@@ -8,11 +8,11 @@
  * Hover/focus/active color = #C400EB
  */
 
-
 /**
  * Page-level styles.
  */
-html, body {
+html,
+body {
     height: 100%;
     box-sizing: border-box;
 }
@@ -20,7 +20,7 @@ html, body {
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Montserrat', sans-serif;
+    font-family: "Montserrat", sans-serif;
     font-size: 16px;
     color: #161616;
     box-sizing: border-box;
@@ -48,22 +48,27 @@ body.no-scroll {
 /**
  * All links styles.
  */
-a, a:visited {
+a,
+a:visited {
     color: #161616;
     text-decoration: none;
     box-shadow: 0px 2px #161616;
 }
 
-a:hover, a:active, a:focus {
+a:hover,
+a:active,
+a:focus {
     outline: 1pc solid rgba(0, 0, 0, 0);
-    color: #C400EB;
-    box-shadow: 0px 4px #C400EB;
+    color: #c400eb;
+    box-shadow: 0px 4px #c400eb;
 }
 
 /**
  * Page nav styles.
  */
-nav, .header-name, .header-links {
+nav,
+.header-name,
+.header-links {
     display: flex;
 }
 
@@ -85,7 +90,8 @@ nav {
     margin-right: 1px;
 }
 
-.header-link, .header-name {
+.header-link,
+.header-name {
     margin: 10px 15px;
 }
 
@@ -139,13 +145,13 @@ nav {
 }
 
 .menu-button-bar.active {
-    background-color: #C400EB
+    background-color: #c400eb;
 }
 
 /* Rotate first bar */
 .change .menu-button-bar-1 {
-    -webkit-transform: rotate(-45deg) translate(-9px, 6px) ;
-    transform: rotate(-45deg) translate(-9px, 6px) ;
+    -webkit-transform: rotate(-45deg) translate(-9px, 6px);
+    transform: rotate(-45deg) translate(-9px, 6px);
 }
 
 /* Fade out the second bar */
@@ -155,8 +161,8 @@ nav {
 
 /* Rotate last bar */
 .change .menu-button-bar-3 {
-    -webkit-transform: rotate(45deg) translate(-8px, -8px) ;
-    transform: rotate(45deg) translate(-8px, -8px) ;
+    -webkit-transform: rotate(45deg) translate(-8px, -8px);
+    transform: rotate(45deg) translate(-8px, -8px);
 }
 
 /**
@@ -251,7 +257,8 @@ nav {
     position: relative;
 }
 
-.art-thumb-wrapper.square, .art-thumb-wrapper.horizontal {
+.art-thumb-wrapper.square,
+.art-thumb-wrapper.horizontal {
     display: flex;
     align-items: center;
 }
@@ -271,11 +278,15 @@ nav {
 
 @media only screen and (max-width: 600px) {
     /* display: block is adding 4px of space after each thumb, which I quite like on mobile */
-    .art-thumb-wrapper, .art-thumb-wrapper.square, .art-thumb-wrapper.horizontal {
+    .art-thumb-wrapper,
+    .art-thumb-wrapper.square,
+    .art-thumb-wrapper.horizontal {
         display: block;
     }
     /* I don't like 4px of space between the last thumb and the footer, and display: flex removes it */
-    .art-thumb-wrapper:last-child, .art-thumb-wrapper.square:last-child, .art-thumb-wrapper.horizontal:last-child {
+    .art-thumb-wrapper:last-child,
+    .art-thumb-wrapper.square:last-child,
+    .art-thumb-wrapper.horizontal:last-child {
         display: flex;
     }
     .art-thumb-wrapper {
