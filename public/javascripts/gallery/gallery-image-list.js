@@ -118,10 +118,22 @@ const artInfo = [
 
 const codeInfo = [
     {
+        name: "discussions",
+        orientation: "horizontal",
+        alt:
+            "Screenshot of a page of user-created questions and answers relating to the subject of Trigonometry.",
+    },
+    {
         name: "lohp",
         orientation: "horizontal",
         alt:
             "Screenshot of an old version of the Khan Academy homepage. The background image on the page is an illustration of a mountainous landscape during an eclipse.",
+    },
+    {
+        name: "proto-wonderblocks",
+        orientation: "square",
+        alt:
+            "Screenshot of a prototype of a video page on Khan Academy. The design of the page is very simple with few assets, but there are options at the top of page for aligning elements differently and pink partially-transparent columns are laid over the page to show the alignment of various elements.",
     },
 ];
 
