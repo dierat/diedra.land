@@ -50,15 +50,17 @@ body.no-scroll {
  */
 a,
 a:visited {
-    color: #161616;
+    color: white;
     text-decoration: none;
-    box-shadow: 0px 2px #161616;
+    box-shadow: 0px 2px white;
 }
 
 a:hover,
 a:active,
 a:focus {
     outline: 1pc solid rgba(0, 0, 0, 0);
+    /* Be careful; this color only works on white backgrounds.
+      The lighter version to be used on black is #ef9cff */
     color: #c400eb;
     box-shadow: 0px 4px #c400eb;
 }
@@ -72,19 +74,27 @@ nav,
     display: flex;
 }
 
+.header-link:hover,
+.header-link:active,
+.header-link:focus {
+    color: #ef9cff;
+    box-shadow: 0px 4px #ef9cff;
+}
+
 nav {
     justify-content: space-between;
     padding: 10px;
-    border-bottom: 1px solid #161616;
     position: fixed;
     left: 0;
     top: 0;
     width: calc(100% - 20px);
-    background-color: white;
+    color: white;
+    background-color: #161616;
     z-index: 2;
 }
 
 .d-signature-icon {
+    /* Color is #ef9cff */
     height: 22px;
     margin-top: -3px;
     margin-right: 1px;
@@ -139,13 +149,13 @@ nav {
 .menu-button-bar {
     width: 35px;
     height: 5px;
-    background-color: #161616;
+    background-color: white;
     margin: 6px 0;
     transition: 0.4s;
 }
 
 .menu-button-bar.active {
-    background-color: #c400eb;
+    background-color: #ef9cff;
 }
 
 /* Rotate first bar */
@@ -172,7 +182,7 @@ nav {
     overflow: hidden;
     /* TODO: If user has reduced motion on, don't add this transition. */
     transition: height 0.4s ease-out;
-    background-color: white;
+    background-color: #161616;
     position: fixed;
     top: 0;
     left: 0;
@@ -214,16 +224,28 @@ nav {
     margin-top: 60px;
 }
 
-.bio-avatar {
-    border-radius: 50%;
-    width: 100px;
-    height: 100px;
-}
-
 .bio {
     margin-top: 60px;
     display: flex;
     justify-content: center;
+}
+
+.bio-avatar {
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+}
+
+@media only screen and (max-width: 600px) {
+    .bio {
+        margin-top: 80px;
+        padding: 5px;
+    }
+
+    .bio-avatar {
+        width: 40px;
+        height: 40px;
+    }
 }
 
 .bio-text-wrapper {
@@ -249,34 +271,8 @@ nav {
     margin-bottom: 5px;
 }
 
-/* .bio-text-msg:first-child {
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-} */
-
 .bio-text-msg:last-child {
     border-bottom-left-radius: 20px;
-    /* border-bottom-right-radius: 15px; */
-}
-
-.toggleBioOpenButton {
-    border: none;
-    background-color: inherit;
-    padding: 0;
-    margin: 0;
-    font-family: inherit;
-    cursor: pointer;
-    color: #161616;
-    text-decoration: none;
-    box-shadow: 0px 2px #161616;
-}
-
-.toggleBioOpenButton:hover,
-.toggleBioOpenButton:active,
-.toggleBioOpenButton:focus {
-    outline: 1pc solid rgba(0, 0, 0, 0);
-    color: #c400eb;
-    box-shadow: 0px 4px #c400eb;
 }
 
 .gallery {
@@ -292,9 +288,17 @@ nav {
     }
 }
 
+@media only screen and (max-width: 600px) {
+    .gallery {
+        margin-top: 20px;
+    }
+}
+
 .art-thumb {
     object-fit: cover;
     transition: filter 0.5s ease-out;
+    border-top: 1px solid #bebebe;
+    border-bottom: 1px solid #bebebe;
 }
 
 .art-thumb-loading {
@@ -390,6 +394,8 @@ footer {
     border-top: 1px solid #161616;
     padding: 20px 25px;
     text-align: center;
+    color: white;
+    background-color: #161616;
 }
 
 @media only screen and (max-width: 600px) {
