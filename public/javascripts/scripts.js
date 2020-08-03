@@ -1,8 +1,6 @@
 import {artInfo, codeInfo} from "./gallery/gallery-image-list.js";
 import {artBio, codeBio} from "./bio.js";
 
-const BIO_SECTION_NUM_DEFAULT_VISIBLE = 2;
-
 const getCurrentPageName = () => {
     return window.location.pathname
         .split("")
@@ -74,7 +72,6 @@ class TopLevelWrapper extends React.Component {
         mobileMenuOpen: false,
         // "active" in this case means focused/hovered.
         mobileMenuButtonActive: false,
-        numBioSectionsVisible: BIO_SECTION_NUM_DEFAULT_VISIBLE,
     };
 
     componentDidMount = () => {
@@ -92,7 +89,6 @@ class TopLevelWrapper extends React.Component {
 
         this.setState({
             currentPage: newPage,
-            numBioSectionsVisible: BIO_SECTION_NUM_DEFAULT_VISIBLE,
         });
         history.pushState(null, null, `${window.location.origin}/${newPage}/`);
         this.handleMobileMenuToggle(false);
@@ -214,27 +210,9 @@ class TopLevelWrapper extends React.Component {
         );
     };
 
-    // openMore is a boolean.
-    handleToggleBioOpenButtonClick = openMore => {
-        const newNumBioSectionsVisible = openMore
-            ? this.state.numBioSectionsVisible + 1
-            : BIO_SECTION_NUM_DEFAULT_VISIBLE;
-        this.setState({numBioSectionsVisible: newNumBioSectionsVisible});
-
-        // TODO: handle focus - probably focus on new section?
-    };
-
     renderBio = () => {
-        const {currentPage, numBioSectionsVisible} = this.state;
+        const {currentPage} = this.state;
         const bioSections = currentPage === "code" ? codeBio : artBio;
-        const maxNumBioSectionsVisible = bioSections.length;
-
-        const visibleBioSections = bioSections.slice(0, numBioSectionsVisible);
-        const allSectionsAreVisible =
-            maxNumBioSectionsVisible === numBioSectionsVisible;
-
-        const allSectionsVisibleByDefault =
-            bioSections.length === BIO_SECTION_NUM_DEFAULT_VISIBLE;
 
         // TODO: Serve up avatar the same way we do the rest of the gallery.
         return (
@@ -245,7 +223,7 @@ class TopLevelWrapper extends React.Component {
                     alt="Avatar for Diedra, styled as if this were the beginning of a chat conversation."
                 />
                 <div className="bio-text-wrapper">
-                    {visibleBioSections.map((bioSection, index) => {
+                    {bioSections.map((bioSection, index) => {
                         return (
                             <div
                                 className="bio-text-section"
@@ -264,25 +242,6 @@ class TopLevelWrapper extends React.Component {
                             </div>
                         );
                     })}
-
-                    {!allSectionsVisibleByDefault && (
-                        <button
-                            className="toggleBioOpenButton"
-                            onClick={() =>
-                                this.handleToggleBioOpenButtonClick(
-                                    !allSectionsAreVisible
-                                )}
-                            label={
-                                allSectionsAreVisible ? (
-                                    "Show less introduction text"
-                                ) : (
-                                    "Show more introduction text"
-                                )
-                            }
-                        >
-                            {allSectionsAreVisible ? "Show less" : "Show more"}
-                        </button>
-                    )}
                 </div>
             </div>
         );
