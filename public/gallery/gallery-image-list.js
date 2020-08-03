@@ -116,6 +116,13 @@ var artInfo = [
     },
 ];
 
-var codeInfo = [];
+var codeInfo = [
+    {
+        name: "lohp",
+        orientation: "horizontal",
+        alt:
+            "Screenshot of an old version of the Khan Academy homepage. The background image on the page is an illustration of a mountainous landscape during an eclipse.",
+    },
+];
 
 export {artInfo, codeInfo};
