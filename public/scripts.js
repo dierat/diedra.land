@@ -239,12 +239,13 @@ var TopLevelWrapper = function (_React$Component2) {
 
             var allSectionsVisibleByDefault = bioSections.length === BIO_SECTION_NUM_DEFAULT_VISIBLE;
 
+            // TODO: Serve up avatar the same way we do the rest of the gallery.
             return React.createElement(
                 "div",
                 { className: "bio" },
                 React.createElement("img", {
                     className: "bio-avatar",
-                    src: "./images/icons/avatar.jpg",
+                    src: "./images/icons/avatar.png",
                     alt: "Avatar for Diedra, styled as if this were the beginning of a chat conversation."
                 }),
                 React.createElement(

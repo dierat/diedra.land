@@ -236,11 +236,12 @@ class TopLevelWrapper extends React.Component {
         const allSectionsVisibleByDefault =
             bioSections.length === BIO_SECTION_NUM_DEFAULT_VISIBLE;
 
+        // TODO: Serve up avatar the same way we do the rest of the gallery.
         return (
             <div className="bio">
                 <img
                     className="bio-avatar"
-                    src="./images/icons/avatar.jpg"
+                    src="./images/icons/avatar.png"
                     alt="Avatar for Diedra, styled as if this were the beginning of a chat conversation."
                 />
                 <div className="bio-text-wrapper">
