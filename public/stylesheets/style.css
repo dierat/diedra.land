@@ -208,12 +208,82 @@ nav {
  * Gallery styles.
  */
 #main-content {
+    box-sizing: border-box;
+    min-height: calc(100% - 60px);
+    /* Pushes the content below the header. */
+    margin-top: 60px;
+}
+
+.bio-avatar {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+}
+
+.bio {
+    margin-top: 60px;
+    display: flex;
+    justify-content: center;
+}
+
+.bio-text-wrapper {
+    margin-left: 10px;
+    max-width: 800px;
+}
+
+.bio-text-section:not(:last-child) {
+    margin-bottom: 15px;
+}
+
+.bio-text-msg {
+    padding: 10px;
+    border: 1px solid #bebebe;
+    border-radius: 2px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    display: inline-block;
+    line-height: 1.4;
+}
+
+.bio-text-msg:not(:last-child) {
+    margin-bottom: 5px;
+}
+
+/* .bio-text-msg:first-child {
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+} */
+
+.bio-text-msg:last-child {
+    border-bottom-left-radius: 20px;
+    /* border-bottom-right-radius: 15px; */
+}
+
+.toggleBioOpenButton {
+    border: none;
+    background-color: inherit;
+    padding: 0;
+    margin: 0;
+    font-family: inherit;
+    cursor: pointer;
+    color: #161616;
+    text-decoration: none;
+    box-shadow: 0px 2px #161616;
+}
+
+.toggleBioOpenButton:hover,
+.toggleBioOpenButton:active,
+.toggleBioOpenButton:focus {
+    outline: 1pc solid rgba(0, 0, 0, 0);
+    color: #c400eb;
+    box-shadow: 0px 4px #c400eb;
+}
+
+.gallery {
     margin-top: 60px;
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
-    box-sizing: border-box;
-    min-height: calc(100% - 60px);
 }
 
 @media only screen and (min-width: 601px) {
@@ -245,6 +315,7 @@ nav {
 @media only screen and (min-width: 601px) {
     .art-thumb {
         border: 1px solid #bebebe;
+        border-radius: 10px;
     }
 
     .art-thumb.vertical {

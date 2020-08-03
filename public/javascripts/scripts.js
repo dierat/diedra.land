@@ -1,6 +1,7 @@
-"use strict";
-
 import {artInfo, codeInfo} from "./gallery/gallery-image-list.js";
+import {artBio, codeBio} from "./bio.js";
+
+const BIO_SECTION_NUM_DEFAULT_VISIBLE = 2;
 
 const getCurrentPageName = () => {
     return window.location.pathname
@@ -73,6 +74,7 @@ class TopLevelWrapper extends React.Component {
         mobileMenuOpen: false,
         // "active" in this case means focused/hovered.
         mobileMenuButtonActive: false,
+        numBioSectionsVisible: BIO_SECTION_NUM_DEFAULT_VISIBLE,
     };
 
     componentDidMount = () => {
@@ -88,7 +90,10 @@ class TopLevelWrapper extends React.Component {
             return;
         }
 
-        this.setState({currentPage: newPage});
+        this.setState({
+            currentPage: newPage,
+            numBioSectionsVisible: BIO_SECTION_NUM_DEFAULT_VISIBLE,
+        });
         history.pushState(null, null, `${window.location.origin}/${newPage}/`);
         this.handleMobileMenuToggle(false);
         this.handleMobileMenuButtonToggle(false);
@@ -209,6 +214,79 @@ class TopLevelWrapper extends React.Component {
         );
     };
 
+    // openMore is a boolean.
+    handleToggleBioOpenButtonClick = openMore => {
+        const newNumBioSectionsVisible = openMore
+            ? this.state.numBioSectionsVisible + 1
+            : BIO_SECTION_NUM_DEFAULT_VISIBLE;
+        this.setState({numBioSectionsVisible: newNumBioSectionsVisible});
+
+        // TODO: handle focus - probably focus on new section?
+    };
+
+    renderBio = () => {
+        const {currentPage, numBioSectionsVisible} = this.state;
+        const bioSections = currentPage === "code" ? codeBio : artBio;
+        const maxNumBioSectionsVisible = bioSections.length;
+
+        const visibleBioSections = bioSections.slice(0, numBioSectionsVisible);
+        const allSectionsAreVisible =
+            maxNumBioSectionsVisible === numBioSectionsVisible;
+
+        const allSectionsVisibleByDefault =
+            bioSections.length === BIO_SECTION_NUM_DEFAULT_VISIBLE;
+
+        return (
+            <div className="bio">
+                <img
+                    className="bio-avatar"
+                    src="./images/icons/avatar.jpg"
+                    alt="Avatar for Diedra, styled as if this were the beginning of a chat conversation."
+                />
+                <div className="bio-text-wrapper">
+                    {visibleBioSections.map((bioSection, index) => {
+                        return (
+                            <div
+                                className="bio-text-section"
+                                key={`bioSection-${index}`}
+                            >
+                                {bioSection.map((bioMessage, index) => {
+                                    return (
+                                        <div
+                                            className="bio-text-msg"
+                                            key={`bioMessage-${index}`}
+                                        >
+                                            {bioMessage}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        );
+                    })}
+
+                    {!allSectionsVisibleByDefault && (
+                        <button
+                            className="toggleBioOpenButton"
+                            onClick={() =>
+                                this.handleToggleBioOpenButtonClick(
+                                    !allSectionsAreVisible
+                                )}
+                            label={
+                                allSectionsAreVisible ? (
+                                    "Show less introduction text"
+                                ) : (
+                                    "Show more introduction text"
+                                )
+                            }
+                        >
+                            {allSectionsAreVisible ? "Show less" : "Show more"}
+                        </button>
+                    )}
+                </div>
+            </div>
+        );
+    };
+
     render() {
         const {
             currentPage,
@@ -288,25 +366,31 @@ class TopLevelWrapper extends React.Component {
                 </div>
 
                 <div id="main-content">
-                    {currentPage === "code" &&
-                        codeInfo.map((info, index) => (
-                            <GalleryImage
-                                info={info}
-                                index={index}
-                                key={`gallery-image-${index}`}
-                            />
-                        ))}
+                    {this.renderBio()}
 
-                    {currentPage === "art" &&
-                        artInfo.map((info, index) => (
-                            <GalleryImage
-                                info={info}
-                                index={index}
-                                key={`gallery-image-${index}`}
-                            />
-                        ))}
+                    <div className="gallery">
+                        {currentPage === "code" &&
+                            codeInfo.map((info, index) => (
+                                <GalleryImage
+                                    info={info}
+                                    index={index}
+                                    key={`gallery-image-${index}`}
+                                />
+                            ))}
 
-                    {currentPage === "blog" && <div>I AM A BLOG FEAR ME</div>}
+                        {currentPage === "art" &&
+                            artInfo.map((info, index) => (
+                                <GalleryImage
+                                    info={info}
+                                    index={index}
+                                    key={`gallery-image-${index}`}
+                                />
+                            ))}
+
+                        {currentPage === "blog" && (
+                            <div>I AM A BLOG FEAR ME</div>
+                        )}
+                    </div>
                 </div>
 
                 <footer>

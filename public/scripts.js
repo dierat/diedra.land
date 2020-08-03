@@ -1,5 +1,3 @@
-"use strict";
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -9,6 +7,9 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 import { artInfo, codeInfo } from "./gallery/gallery-image-list.js";
+import { artBio, codeBio } from "./bio.js";
+
+var BIO_SECTION_NUM_DEFAULT_VISIBLE = 2;
 
 var getCurrentPageName = function getCurrentPageName() {
     return window.location.pathname.split("").filter(function (string) {
@@ -99,7 +100,8 @@ var TopLevelWrapper = function (_React$Component2) {
             currentPage: getCurrentPageName(),
             mobileMenuOpen: false,
             // "active" in this case means focused/hovered.
-            mobileMenuButtonActive: false
+            mobileMenuButtonActive: false,
+            numBioSectionsVisible: BIO_SECTION_NUM_DEFAULT_VISIBLE
         }, _this2.componentDidMount = function () {
             window.addEventListener("resize", function () {
                 return _this2.handleMobileMenuToggle(false);
@@ -111,7 +113,10 @@ var TopLevelWrapper = function (_React$Component2) {
                 return;
             }
 
-            _this2.setState({ currentPage: newPage });
+            _this2.setState({
+                currentPage: newPage,
+                numBioSectionsVisible: BIO_SECTION_NUM_DEFAULT_VISIBLE
+            });
             history.pushState(null, null, window.location.origin + "/" + newPage + "/");
             _this2.handleMobileMenuToggle(false);
             _this2.handleMobileMenuButtonToggle(false);
@@ -216,10 +221,74 @@ var TopLevelWrapper = function (_React$Component2) {
                     "Contact"
                 )
             );
+        }, _this2.handleToggleBioOpenButtonClick = function (openMore) {
+            var newNumBioSectionsVisible = openMore ? _this2.state.numBioSectionsVisible + 1 : BIO_SECTION_NUM_DEFAULT_VISIBLE;
+            _this2.setState({ numBioSectionsVisible: newNumBioSectionsVisible });
+
+            // TODO: handle focus - probably focus on new section?
+        }, _this2.renderBio = function () {
+            var _this2$state = _this2.state,
+                currentPage = _this2$state.currentPage,
+                numBioSectionsVisible = _this2$state.numBioSectionsVisible;
+
+            var bioSections = currentPage === "code" ? codeBio : artBio;
+            var maxNumBioSectionsVisible = bioSections.length;
+
+            var visibleBioSections = bioSections.slice(0, numBioSectionsVisible);
+            var allSectionsAreVisible = maxNumBioSectionsVisible === numBioSectionsVisible;
+
+            var allSectionsVisibleByDefault = bioSections.length === BIO_SECTION_NUM_DEFAULT_VISIBLE;
+
+            return React.createElement(
+                "div",
+                { className: "bio" },
+                React.createElement("img", {
+                    className: "bio-avatar",
+                    src: "./images/icons/avatar.jpg",
+                    alt: "Avatar for Diedra, styled as if this were the beginning of a chat conversation."
+                }),
+                React.createElement(
+                    "div",
+                    { className: "bio-text-wrapper" },
+                    visibleBioSections.map(function (bioSection, index) {
+                        return React.createElement(
+                            "div",
+                            {
+                                className: "bio-text-section",
+                                key: "bioSection-" + index
+                            },
+                            bioSection.map(function (bioMessage, index) {
+                                return React.createElement(
+                                    "div",
+                                    {
+                                        className: "bio-text-msg",
+                                        key: "bioMessage-" + index
+                                    },
+                                    bioMessage
+                                );
+                            })
+                        );
+                    }),
+                    !allSectionsVisibleByDefault && React.createElement(
+                        "button",
+                        {
+                            className: "toggleBioOpenButton",
+                            onClick: function onClick() {
+                                return _this2.handleToggleBioOpenButtonClick(!allSectionsAreVisible);
+                            },
+                            label: allSectionsAreVisible ? "Show less introduction text" : "Show more introduction text"
+                        },
+                        allSectionsAreVisible ? "Show less" : "Show more"
+                    )
+                )
+            );
         }, _temp2), _possibleConstructorReturn(_this2, _ret2);
     }
 
     // Toggles the focus/hover state of the mobile menu button.
+
+
+    // openMore is a boolean.
 
 
     _createClass(TopLevelWrapper, [{
@@ -320,24 +389,29 @@ var TopLevelWrapper = function (_React$Component2) {
                 React.createElement(
                     "div",
                     { id: "main-content" },
-                    currentPage === "code" && codeInfo.map(function (info, index) {
-                        return React.createElement(GalleryImage, {
-                            info: info,
-                            index: index,
-                            key: "gallery-image-" + index
-                        });
-                    }),
-                    currentPage === "art" && artInfo.map(function (info, index) {
-                        return React.createElement(GalleryImage, {
-                            info: info,
-                            index: index,
-                            key: "gallery-image-" + index
-                        });
-                    }),
-                    currentPage === "blog" && React.createElement(
+                    this.renderBio(),
+                    React.createElement(
                         "div",
-                        null,
-                        "I AM A BLOG FEAR ME"
+                        { className: "gallery" },
+                        currentPage === "code" && codeInfo.map(function (info, index) {
+                            return React.createElement(GalleryImage, {
+                                info: info,
+                                index: index,
+                                key: "gallery-image-" + index
+                            });
+                        }),
+                        currentPage === "art" && artInfo.map(function (info, index) {
+                            return React.createElement(GalleryImage, {
+                                info: info,
+                                index: index,
+                                key: "gallery-image-" + index
+                            });
+                        }),
+                        currentPage === "blog" && React.createElement(
+                            "div",
+                            null,
+                            "I AM A BLOG FEAR ME"
+                        )
                     )
                 ),
                 React.createElement(
