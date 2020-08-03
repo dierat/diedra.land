@@ -2,7 +2,12 @@
  * Setting up the gallery.
  *
  * Image sizes
- * 1x:
+ * 0x (saved as a gif):
+ * 100 x 133 (vertical)
+ * 100 x 75 (horizontal)
+ * 100 x 100 (square)
+ *
+ * 1x (from here down is saved as jpg):
  * 600 x 800 (vertical)
  * 600 x 450 (horizontal)
  * 600 x 600 (square)
