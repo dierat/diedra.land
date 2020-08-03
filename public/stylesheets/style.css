@@ -81,7 +81,7 @@ nav {
     top: 0;
     width: calc(100% - 20px);
     background-color: white;
-    z-index: 1;
+    z-index: 2;
 }
 
 .d-signature-icon {
@@ -178,6 +178,7 @@ nav {
     left: 0;
     width: 100%;
     height: 1000px;
+    z-index: 1;
 }
 
 #menu-overlay.menu-closed {
@@ -236,19 +237,22 @@ nav {
     position: absolute;
 }
 
-.art-thumb.vertical {
-    width: 450px;
-    height: 600px;
-}
+/* These constraints mess up mobile. */
+@media only screen and (min-width: 601px) {
+    .art-thumb.vertical {
+        width: 450px;
+        height: 600px;
+    }
 
-.art-thumb.horizontal {
-    width: 600px;
-    height: 450px;
-}
+    .art-thumb.horizontal {
+        width: 600px;
+        height: 450px;
+    }
 
-.art-thumb.square {
-    width: 525px;
-    height: 525px;
+    .art-thumb.square {
+        width: 525px;
+        height: 525px;
+    }
 }
 
 .art-thumb-wrapper {
