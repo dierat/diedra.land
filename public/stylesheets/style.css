@@ -318,7 +318,7 @@ nav {
 /* These constraints mess up mobile. */
 @media only screen and (min-width: 601px) {
     .art-thumb {
-        border: 1px solid #bebebe;
+        border: 2px solid #bebebe;
         border-radius: 10px;
     }
 
@@ -340,8 +340,8 @@ nav {
 
 .art-thumb-wrapper {
     margin: 10px;
-    overflow: hidden;
     position: relative;
+    cursor: pointer;
 }
 
 .art-thumb-wrapper.square,
@@ -351,17 +351,18 @@ nav {
 }
 
 /* TODO: Make thumbs into links that go to a "detail" page. */
-/* @media only screen and (min-width: 601px) {
+@media only screen and (min-width: 601px) {
     .art-thumb {
-        border: 2px solid rgba(0, 0, 0, 0);
-        transition: all .2s ease-out;
+        transition: all 0.2s ease-out;
     }
 
-    .art-thumb:hover, .art-thumb:focus {
+    .art-thumb:hover,
+    .art-thumb:focus {
         transform: scale(1.01);
-        border: 2px solid #C400EB;
+        border: 2px solid #c400eb;
+        /* filter: drop-shadow(30px 10px 4px #4444dd); */
     }
-} */
+}
 
 @media only screen and (max-width: 600px) {
     /* display: block is adding 4px of space after each thumb, which I quite like on mobile */
