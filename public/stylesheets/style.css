@@ -224,7 +224,7 @@ nav {
 
 .art-thumb {
     object-fit: cover;
-    transition: filter 0.25s ease-out;
+    transition: filter 0.5s ease-out;
 }
 
 .art-thumb-loading {
