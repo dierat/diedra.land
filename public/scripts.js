@@ -56,13 +56,19 @@ function _inherits(subClass, superClass) {
 import {artInfo, codeInfo} from "./gallery/gallery-image-list.js";
 import {artBio, codeBio} from "./bio.js";
 
-var getCurrentPageName = function getCurrentPageName() {
-    return window.location.pathname
-        .split("")
+var getCurrentPage = function getCurrentPage() {
+    var splitPath = window.location.pathname
+        .split("/")
         .filter(function(string) {
-            return string !== "/";
-        })
-        .join("");
+            return string !== "";
+        });
+
+    return {
+        // This should be "code", "art", or "blog".
+        area: splitPath[0],
+        // This should be the id of a project or post, if given.
+        focus: splitPath[1] || null,
+    };
 };
 
 var GalleryImage = (function(_React$Component) {
@@ -104,6 +110,26 @@ var GalleryImage = (function(_React$Component) {
             (_this.onImageLoad = function() {
                 if (_this._mounted) {
                     _this.setState({loading: false});
+                }
+            }),
+            (_this.handleThumbClick = function(event) {
+                event.preventDefault();
+
+                var _this$props = _this.props,
+                    handleClientNavigation = _this$props.handleClientNavigation,
+                    currentArea = _this$props.currentArea,
+                    info = _this$props.info;
+
+                _this.props.handleClientNavigation(
+                    event,
+                    "code",
+                    _this.props.info.name
+                );
+            }),
+            (_this.handleThumbKeyUp = function(event) {
+                if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault(); // Why isn't this working???
+                    _this.handleThumbClick(event);
                 }
             }),
             _temp)),
@@ -168,6 +194,9 @@ var GalleryImage = (function(_React$Component) {
                             " " +
                             (this.state.loading && "hidden"),
                         onLoad: this.onImageLoad,
+                        tabIndex: 0,
+                        onClick: this.handleThumbClick,
+                        onKeyUp: this.handleThumbKeyUp,
                     })
                 );
             },
@@ -208,31 +237,74 @@ var TopLevelWrapper = (function(_React$Component2) {
             _this2)),
             (_this2.state = {
                 // TODO: Update page title bsed on currentPage?
-                currentPage: getCurrentPageName(),
+                // currentPage will have the following structure:
+                // {
+                //     area: This should be "code", "art", or "blog".
+                //     focus: This should be the id of a project or post, if given.
+                // };
+                currentPage: getCurrentPage(),
                 mobileMenuOpen: false,
                 // "active" in this case means focused/hovered.
                 mobileMenuButtonActive: false,
             }),
+            (_this2._mounted = false),
             (_this2.componentDidMount = function() {
                 window.addEventListener("resize", function() {
                     return _this2.handleMobileMenuToggle(false);
                 });
+                window.addEventListener(
+                    "popstate",
+                    _this2.handleBrowserBackButtonClick
+                );
+                _this2._mounted = true;
             }),
-            (_this2.handleClientNavigation = function(event, newPage) {
+            (_this2.componentWillUnmount = function() {
+                _this2._mounted = false;
+            }),
+            (_this2.handleBrowserBackButtonClick = function() {
+                var currentPage = getCurrentPage();
+
+                if (_this2._mounted) {
+                    _this2.setState({
+                        currentPage: currentPage,
+                    });
+
+                    _this2.handleMobileMenuToggle(false);
+                    _this2.handleMobileMenuButtonToggle(false);
+                }
+            }),
+            (_this2.handleClientNavigation = function(event, newArea) {
+                var newFocus =
+                    arguments.length > 2 && arguments[2] !== undefined
+                        ? arguments[2]
+                        : null;
+
                 event.preventDefault();
 
-                if (newPage === _this2.state.currentPage) {
+                var currentPage = _this2.state.currentPage;
+
+                if (
+                    currentPage.area === newArea &&
+                    currentPage.focus === newFocus
+                ) {
                     return;
                 }
 
                 _this2.setState({
-                    currentPage: newPage,
+                    currentPage: {
+                        area: newArea,
+                        focus: newFocus,
+                    },
                 });
-                history.pushState(
-                    null,
-                    null,
-                    window.location.origin + "/" + newPage + "/"
-                );
+
+                var newLocation =
+                    window.location.origin +
+                    "/" +
+                    newArea +
+                    "/" +
+                    (newFocus || "");
+                history.pushState(null, null, newLocation);
+
                 _this2.handleMobileMenuToggle(false);
                 _this2.handleMobileMenuButtonToggle(false);
 
@@ -297,10 +369,13 @@ var TopLevelWrapper = (function(_React$Component2) {
                           return (_this2.lastOverlayLink = node);
                       };
 
+                // TODO: Should these be buttons? They look like links but they don't go anywhere.
+                // TODO: Instead of removing a link if we're on that page, show a unresponsive text element instead.
                 return React.createElement(
                     "div",
                     {className: linkClassName + "s"},
-                    currentPage !== "code" &&
+                    currentPage.area !== "code" &&
+                        !currentPage.focus &&
                         React.createElement(
                             "a",
                             {
@@ -315,7 +390,8 @@ var TopLevelWrapper = (function(_React$Component2) {
                             },
                             "Code"
                         ),
-                    currentPage !== "art" &&
+                    currentPage.area !== "art" &&
+                        !currentPage.focus &&
                         React.createElement(
                             "a",
                             {
@@ -363,8 +439,13 @@ var TopLevelWrapper = (function(_React$Component2) {
             }),
             (_this2.renderBio = function() {
                 var currentPage = _this2.state.currentPage;
+                // Should we show the bio anyway? But maybe change it a little.
 
-                var bioSections = currentPage === "code" ? codeBio : artBio;
+                if (currentPage.focus) {
+                    return;
+                }
+                var bioSections =
+                    currentPage.area === "code" ? codeBio : artBio;
 
                 // TODO: Serve up avatar the same way we do the rest of the gallery.
                 return React.createElement(
@@ -401,6 +482,134 @@ var TopLevelWrapper = (function(_React$Component2) {
                     )
                 );
             }),
+            (_this2.renderHeader = function() {
+                var _this2$state = _this2.state,
+                    mobileMenuButtonActive =
+                        _this2$state.mobileMenuButtonActive,
+                    mobileMenuOpen = _this2$state.mobileMenuOpen;
+
+                return React.createElement(
+                    "header",
+                    null,
+                    React.createElement(
+                        "nav",
+                        null,
+                        React.createElement(
+                            "div",
+                            {className: "header-name"},
+                            React.createElement("img", {
+                                "aria-hidden": true,
+                                src: "./images/icons/d-signature-icon.png",
+                                className: "d-signature-icon",
+                            }),
+                            React.createElement(
+                                "div",
+                                {"aria-hidden": true},
+                                "iedra Rater"
+                            ),
+                            React.createElement(
+                                "span",
+                                {className: "sr-only"},
+                                "Diedra Rater"
+                            ),
+                            React.createElement(
+                                "span",
+                                {className: "header-profession"},
+                                "\xA0\xA0|\xA0\xA0Programmer & Artist"
+                            )
+                        ),
+                        _this2.renderNavigationLinks(true),
+                        React.createElement(
+                            "button",
+                            {
+                                id: "header-menu-button",
+                                ref: function ref(node) {
+                                    return (_this2.mobileMenuButton = node);
+                                },
+                                "aria-label": mobileMenuOpen
+                                    ? "Close navigation menu"
+                                    : "Open navigation menu",
+                                onClick: function onClick() {
+                                    return _this2.handleMobileMenuToggle(
+                                        !mobileMenuOpen
+                                    );
+                                },
+                                onKeyUp: _this2.handleMobileMenuButtonKeyUp,
+                                onMouseEnter: function onMouseEnter() {
+                                    return _this2.handleMobileMenuButtonToggle(
+                                        true
+                                    );
+                                },
+                                onFocus: function onFocus() {
+                                    return _this2.handleMobileMenuButtonToggle(
+                                        true
+                                    );
+                                },
+                                onMouseLeave: function onMouseLeave() {
+                                    return _this2.handleMobileMenuButtonToggle(
+                                        false
+                                    );
+                                },
+                                onBlur: function onBlur() {
+                                    return _this2.handleMobileMenuButtonToggle(
+                                        false
+                                    );
+                                },
+                                "aria-expanded": mobileMenuOpen,
+                                className: mobileMenuOpen ? "change" : "",
+                            },
+                            [1, 2, 3].map(function(index) {
+                                var menuButtonBarClassName =
+                                    "menu-button-bar-" +
+                                    index +
+                                    " menu-button-bar";
+                                if (mobileMenuButtonActive) {
+                                    menuButtonBarClassName += " active";
+                                }
+
+                                return React.createElement("div", {
+                                    className: menuButtonBarClassName,
+                                    key: "menuButtonBar" + index,
+                                });
+                            }),
+                            React.createElement("div", {
+                                className: "menu-button-backdrop",
+                            })
+                        )
+                    )
+                );
+            }),
+            (_this2.renderGalleryPage = function() {
+                var currentPage = _this2.state.currentPage;
+
+                var infoList = null;
+                if (currentPage.area === "code") {
+                    infoList = codeInfo;
+                } else if (currentPage.area === "art") {
+                    infoList = artInfo;
+                } else {
+                    // TODO: Should we throw an error?
+                    return;
+                }
+
+                return React.createElement(
+                    "div",
+                    {className: "gallery"},
+                    infoList.map(function(info, index) {
+                        return React.createElement(GalleryImage, {
+                            info: info,
+                            index: index,
+                            key: "gallery-image-" + index,
+                            handleClientNavigation:
+                                _this2.handleClientNavigation,
+                            currentArea: currentPage.area,
+                        });
+                    })
+                );
+            }),
+            (_this2.renderFocusPage = function() {
+                return;
+            }),
             _temp2)),
             _possibleConstructorReturn(_this2, _ret2)
         );
@@ -412,8 +621,6 @@ var TopLevelWrapper = (function(_React$Component2) {
         {
             key: "render",
             value: function render() {
-                var _this3 = this;
-
                 var _state = this.state,
                     currentPage = _state.currentPage,
                     mobileMenuButtonActive = _state.mobileMenuButtonActive,
@@ -422,96 +629,7 @@ var TopLevelWrapper = (function(_React$Component2) {
                 return React.createElement(
                     React.Fragment,
                     null,
-                    React.createElement(
-                        "header",
-                        null,
-                        React.createElement(
-                            "nav",
-                            null,
-                            React.createElement(
-                                "div",
-                                {className: "header-name"},
-                                React.createElement("img", {
-                                    "aria-hidden": true,
-                                    src: "./images/icons/d-signature-icon.png",
-                                    className: "d-signature-icon",
-                                }),
-                                React.createElement(
-                                    "div",
-                                    {"aria-hidden": true},
-                                    "iedra Rater"
-                                ),
-                                React.createElement(
-                                    "span",
-                                    {className: "sr-only"},
-                                    "Diedra Rater"
-                                ),
-                                React.createElement(
-                                    "span",
-                                    {className: "header-profession"},
-                                    "\xA0\xA0|\xA0\xA0Programmer & Artist"
-                                )
-                            ),
-                            this.renderNavigationLinks(true),
-                            React.createElement(
-                                "button",
-                                {
-                                    id: "header-menu-button",
-                                    ref: function ref(node) {
-                                        return (_this3.mobileMenuButton = node);
-                                    },
-                                    "aria-label": mobileMenuOpen
-                                        ? "Close navigation menu"
-                                        : "Open navigation menu",
-                                    onClick: function onClick() {
-                                        return _this3.handleMobileMenuToggle(
-                                            !mobileMenuOpen
-                                        );
-                                    },
-                                    onKeyUp: this.handleMobileMenuButtonKeyUp,
-                                    onMouseEnter: function onMouseEnter() {
-                                        return _this3.handleMobileMenuButtonToggle(
-                                            true
-                                        );
-                                    },
-                                    onFocus: function onFocus() {
-                                        return _this3.handleMobileMenuButtonToggle(
-                                            true
-                                        );
-                                    },
-                                    onMouseLeave: function onMouseLeave() {
-                                        return _this3.handleMobileMenuButtonToggle(
-                                            false
-                                        );
-                                    },
-                                    onBlur: function onBlur() {
-                                        return _this3.handleMobileMenuButtonToggle(
-                                            false
-                                        );
-                                    },
-                                    "aria-expanded": mobileMenuOpen,
-                                    className: mobileMenuOpen ? "change" : "",
-                                },
-                                [1, 2, 3].map(function(index) {
-                                    var menuButtonBarClassName =
-                                        "menu-button-bar-" +
-                                        index +
-                                        " menu-button-bar";
-                                    if (mobileMenuButtonActive) {
-                                        menuButtonBarClassName += " active";
-                                    }
-
-                                    return React.createElement("div", {
-                                        className: menuButtonBarClassName,
-                                        key: "menuButtonBar" + index,
-                                    });
-                                }),
-                                React.createElement("div", {
-                                    className: "menu-button-backdrop",
-                                })
-                            )
-                        )
-                    ),
+                    this.renderHeader(),
                     React.createElement(
                         "div",
                         {
@@ -524,32 +642,9 @@ var TopLevelWrapper = (function(_React$Component2) {
                         "div",
                         {id: "main-content"},
                         this.renderBio(),
-                        React.createElement(
-                            "div",
-                            {className: "gallery"},
-                            currentPage === "code" &&
-                                codeInfo.map(function(info, index) {
-                                    return React.createElement(GalleryImage, {
-                                        info: info,
-                                        index: index,
-                                        key: "gallery-image-" + index,
-                                    });
-                                }),
-                            currentPage === "art" &&
-                                artInfo.map(function(info, index) {
-                                    return React.createElement(GalleryImage, {
-                                        info: info,
-                                        index: index,
-                                        key: "gallery-image-" + index,
-                                    });
-                                }),
-                            currentPage === "blog" &&
-                                React.createElement(
-                                    "div",
-                                    null,
-                                    "I AM A BLOG FEAR ME"
-                                )
-                        )
+                        currentPage.focus
+                            ? this.renderFocusPage()
+                            : this.renderGalleryPage()
                     ),
                     React.createElement(
                         "footer",

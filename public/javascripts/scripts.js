@@ -1,11 +1,17 @@
 import {artInfo, codeInfo} from "./gallery/gallery-image-list.js";
 import {artBio, codeBio} from "./bio.js";
 
-const getCurrentPageName = () => {
-    return window.location.pathname
-        .split("")
-        .filter(string => string !== "/")
-        .join("");
+const getCurrentPage = () => {
+    const splitPath = window.location.pathname
+        .split("/")
+        .filter(string => string !== "");
+
+    return {
+        // This should be "code", "art", or "blog".
+        area: splitPath[0],
+        // This should be the id of a project or post, if given.
+        focus: splitPath[1] || null,
+    };
 };
 
 class GalleryImage extends React.Component {
@@ -22,6 +28,21 @@ class GalleryImage extends React.Component {
     onImageLoad = () => {
         if (this._mounted) {
             this.setState({loading: false});
+        }
+    };
+
+    handleThumbClick = event => {
+        event.preventDefault();
+
+        const {handleClientNavigation, currentArea, info} = this.props;
+
+        this.props.handleClientNavigation(event, "code", this.props.info.name);
+    };
+
+    handleThumbKeyUp = event => {
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault(); // Why isn't this working???
+            this.handleThumbClick(event);
         }
     };
 
@@ -59,6 +80,9 @@ class GalleryImage extends React.Component {
                     className={`art-thumb ${info.orientation} ${this.state
                         .loading && "hidden"}`}
                     onLoad={this.onImageLoad}
+                    tabIndex={0}
+                    onClick={this.handleThumbClick}
+                    onKeyUp={this.handleThumbKeyUp}
                 />
             </div>
         );
@@ -68,29 +92,64 @@ class GalleryImage extends React.Component {
 class TopLevelWrapper extends React.Component {
     state = {
         // TODO: Update page title bsed on currentPage?
-        currentPage: getCurrentPageName(),
+        // currentPage will have the following structure:
+        // {
+        //     area: This should be "code", "art", or "blog".
+        //     focus: This should be the id of a project or post, if given.
+        // };
+        currentPage: getCurrentPage(),
         mobileMenuOpen: false,
         // "active" in this case means focused/hovered.
         mobileMenuButtonActive: false,
     };
 
+    _mounted = false;
+
     componentDidMount = () => {
         window.addEventListener("resize", () =>
             this.handleMobileMenuToggle(false)
         );
+        window.addEventListener("popstate", this.handleBrowserBackButtonClick);
+        this._mounted = true;
     };
 
-    handleClientNavigation = (event, newPage) => {
+    componentWillUnmount = () => {
+        this._mounted = false;
+    };
+
+    handleBrowserBackButtonClick = () => {
+        const currentPage = getCurrentPage();
+
+        if (this._mounted) {
+            this.setState({
+                currentPage,
+            });
+
+            this.handleMobileMenuToggle(false);
+            this.handleMobileMenuButtonToggle(false);
+        }
+    };
+
+    handleClientNavigation = (event, newArea, newFocus = null) => {
         event.preventDefault();
 
-        if (newPage === this.state.currentPage) {
+        const {currentPage} = this.state;
+
+        if (currentPage.area === newArea && currentPage.focus === newFocus) {
             return;
         }
 
         this.setState({
-            currentPage: newPage,
+            currentPage: {
+                area: newArea,
+                focus: newFocus,
+            },
         });
-        history.pushState(null, null, `${window.location.origin}/${newPage}/`);
+
+        const newLocation = `${window.location.origin}/${newArea}/${newFocus ||
+            ""}`;
+        history.pushState(null, null, newLocation);
+
         this.handleMobileMenuToggle(false);
         this.handleMobileMenuButtonToggle(false);
 
@@ -152,9 +211,12 @@ class TopLevelWrapper extends React.Component {
             ? null
             : node => (this.lastOverlayLink = node);
 
+        // TODO: Should these be buttons? They look like links but they don't go anywhere.
+        // TODO: Instead of removing a link if we're on that page, show a unresponsive text element instead.
         return (
             <div className={`${linkClassName}s`}>
-                {currentPage !== "code" && (
+                {currentPage.area !== "code" &&
+                !currentPage.focus && (
                     <a
                         className={linkClassName}
                         href=""
@@ -164,7 +226,8 @@ class TopLevelWrapper extends React.Component {
                         Code
                     </a>
                 )}
-                {currentPage !== "art" && (
+                {currentPage.area !== "art" &&
+                !currentPage.focus && (
                     <a
                         className={linkClassName}
                         href=""
@@ -174,7 +237,7 @@ class TopLevelWrapper extends React.Component {
                         Art
                     </a>
                 )}
-                {/** currentPage !== "blog" && (
+                {/** currentPage.area !== "blog" && !currentPage.focus && (
                     <a
                         className={linkClassName}
                         href="/blog"
@@ -212,7 +275,11 @@ class TopLevelWrapper extends React.Component {
 
     renderBio = () => {
         const {currentPage} = this.state;
-        const bioSections = currentPage === "code" ? codeBio : artBio;
+        // Should we show the bio anyway? But maybe change it a little.
+        if (currentPage.focus) {
+            return;
+        }
+        const bioSections = currentPage.area === "code" ? codeBio : artBio;
 
         // TODO: Serve up avatar the same way we do the rest of the gallery.
         return (
@@ -247,6 +314,104 @@ class TopLevelWrapper extends React.Component {
         );
     };
 
+    renderHeader = () => {
+        const {mobileMenuButtonActive, mobileMenuOpen} = this.state;
+
+        return (
+            <header>
+                <nav>
+                    <div className="header-name">
+                        <img
+                            aria-hidden
+                            src="./images/icons/d-signature-icon.png"
+                            className="d-signature-icon"
+                        />
+                        <div aria-hidden>iedra Rater</div>
+
+                        <span className="sr-only">Diedra Rater</span>
+
+                        <span className="header-profession">
+                            &nbsp;&nbsp;|&nbsp;&nbsp;Programmer & Artist
+                        </span>
+                    </div>
+
+                    {this.renderNavigationLinks(true)}
+
+                    <button
+                        id="header-menu-button"
+                        ref={node => (this.mobileMenuButton = node)}
+                        aria-label={
+                            mobileMenuOpen ? (
+                                "Close navigation menu"
+                            ) : (
+                                "Open navigation menu"
+                            )
+                        }
+                        onClick={() =>
+                            this.handleMobileMenuToggle(!mobileMenuOpen)}
+                        onKeyUp={this.handleMobileMenuButtonKeyUp}
+                        onMouseEnter={() =>
+                            this.handleMobileMenuButtonToggle(true)}
+                        onFocus={() => this.handleMobileMenuButtonToggle(true)}
+                        onMouseLeave={() =>
+                            this.handleMobileMenuButtonToggle(false)}
+                        onBlur={() => this.handleMobileMenuButtonToggle(false)}
+                        aria-expanded={mobileMenuOpen}
+                        className={mobileMenuOpen ? "change" : ""}
+                    >
+                        {[1, 2, 3].map(index => {
+                            let menuButtonBarClassName = `menu-button-bar-${index} menu-button-bar`;
+                            if (mobileMenuButtonActive) {
+                                menuButtonBarClassName += " active";
+                            }
+
+                            return (
+                                <div
+                                    className={menuButtonBarClassName}
+                                    key={`menuButtonBar${index}`}
+                                />
+                            );
+                        })}
+
+                        <div className="menu-button-backdrop" />
+                    </button>
+                </nav>
+            </header>
+        );
+    };
+
+    renderGalleryPage = () => {
+        const {currentPage} = this.state;
+
+        let infoList = null;
+        if (currentPage.area === "code") {
+            infoList = codeInfo;
+        } else if (currentPage.area === "art") {
+            infoList = artInfo;
+        } else {
+            // TODO: Should we throw an error?
+            return;
+        }
+
+        return (
+            <div className="gallery">
+                {infoList.map((info, index) => (
+                    <GalleryImage
+                        info={info}
+                        index={index}
+                        key={`gallery-image-${index}`}
+                        handleClientNavigation={this.handleClientNavigation}
+                        currentArea={currentPage.area}
+                    />
+                ))}
+            </div>
+        );
+    };
+
+    renderFocusPage = () => {
+        return;
+    };
+
     render() {
         const {
             currentPage,
@@ -256,67 +421,7 @@ class TopLevelWrapper extends React.Component {
 
         return (
             <React.Fragment>
-                <header>
-                    <nav>
-                        <div className="header-name">
-                            <img
-                                aria-hidden
-                                src="./images/icons/d-signature-icon.png"
-                                className="d-signature-icon"
-                            />
-                            <div aria-hidden>iedra Rater</div>
-
-                            <span className="sr-only">Diedra Rater</span>
-
-                            <span className="header-profession">
-                                &nbsp;&nbsp;|&nbsp;&nbsp;Programmer & Artist
-                            </span>
-                        </div>
-
-                        {this.renderNavigationLinks(true)}
-
-                        <button
-                            id="header-menu-button"
-                            ref={node => (this.mobileMenuButton = node)}
-                            aria-label={
-                                mobileMenuOpen ? (
-                                    "Close navigation menu"
-                                ) : (
-                                    "Open navigation menu"
-                                )
-                            }
-                            onClick={() =>
-                                this.handleMobileMenuToggle(!mobileMenuOpen)}
-                            onKeyUp={this.handleMobileMenuButtonKeyUp}
-                            onMouseEnter={() =>
-                                this.handleMobileMenuButtonToggle(true)}
-                            onFocus={() =>
-                                this.handleMobileMenuButtonToggle(true)}
-                            onMouseLeave={() =>
-                                this.handleMobileMenuButtonToggle(false)}
-                            onBlur={() =>
-                                this.handleMobileMenuButtonToggle(false)}
-                            aria-expanded={mobileMenuOpen}
-                            className={mobileMenuOpen ? "change" : ""}
-                        >
-                            {[1, 2, 3].map(index => {
-                                let menuButtonBarClassName = `menu-button-bar-${index} menu-button-bar`;
-                                if (mobileMenuButtonActive) {
-                                    menuButtonBarClassName += " active";
-                                }
-
-                                return (
-                                    <div
-                                        className={menuButtonBarClassName}
-                                        key={`menuButtonBar${index}`}
-                                    />
-                                );
-                            })}
-
-                            <div className="menu-button-backdrop" />
-                        </button>
-                    </nav>
-                </header>
+                {this.renderHeader()}
 
                 <div
                     id="menu-overlay"
@@ -328,29 +433,11 @@ class TopLevelWrapper extends React.Component {
                 <div id="main-content">
                     {this.renderBio()}
 
-                    <div className="gallery">
-                        {currentPage === "code" &&
-                            codeInfo.map((info, index) => (
-                                <GalleryImage
-                                    info={info}
-                                    index={index}
-                                    key={`gallery-image-${index}`}
-                                />
-                            ))}
-
-                        {currentPage === "art" &&
-                            artInfo.map((info, index) => (
-                                <GalleryImage
-                                    info={info}
-                                    index={index}
-                                    key={`gallery-image-${index}`}
-                                />
-                            ))}
-
-                        {currentPage === "blog" && (
-                            <div>I AM A BLOG FEAR ME</div>
-                        )}
-                    </div>
+                    {currentPage.focus ? (
+                        this.renderFocusPage()
+                    ) : (
+                        this.renderGalleryPage()
+                    )}
                 </div>
 
                 <footer>

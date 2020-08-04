@@ -20,9 +20,10 @@ app.use(cookieParser());
 
 // routes
 app.use("/code", subrouteRouter);
+app.use("/code/:id", subrouteRouter);
 app.use("/art", subrouteRouter);
-app.use("/blog", subrouteRouter);
-app.use("/about", subrouteRouter);
+app.use("/art:id", subrouteRouter);
+// app.use("/blog", subrouteRouter);
 app.use("/", indexRouter);
 
 // catch 404 and forward to error handler
