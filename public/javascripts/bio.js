@@ -1,31 +1,106 @@
-const openingLine = "Hi! My name is Diedra, and this is my website. 🙂";
+import {artBio, codeBio} from "./bio-info.js";
 
-const jobDescription =
-    "I'm a frontend developer, or a UX engineer, which means I like to write the code that powers the part of software that people can see, hear, read, and touch.";
+class BioAvatar extends React.Component {
+    _mounted = false;
 
-const conclusion = [
-    "Here are some examples of my favorite work. ",
-    "I hope you're having a great day. Talk to you soon! 👋",
-];
+    state = {
+        loading: true,
+    };
 
-const codeBio = [
-    [openingLine],
-    [
-        jobDescription,
-        "It's really important to me that the web doesn't just work but that it's also easy to use and joyful. It's such a huge part of ours lives, and when it's hard to use, it becomes stressful, and time-consuming to do basic things. Even if a person is \"just\" ordering a pizza or chatting with a friend, having access to that software and having it work well is super important to that person at that time.",
-        "So let's all work hard to make the web a better place, okay? 🥰",
-    ],
-    conclusion,
-];
+    componentDidMount = () => {
+        this._mounted = true;
+    };
 
-const artBio = [
-    [openingLine],
-    [
-        jobDescription,
-        "I'm also a digital artist, and I especially like to draw surreal and fantasy art.",
-        "Because it's not my full-time job, I don't actually get to draw as much as I would like, but I still like to when I can. 🥰",
-    ],
-    conclusion,
-];
+    onImageLoad = () => {
+        if (this._mounted) {
+            this.setState({loading: false});
+        }
+    };
 
-export {codeBio, artBio};
+    render() {
+        const {info, index} = this.props;
+        const {loading} = this.state;
+
+        const artElementLoadingImage = `./images/art/${info.name}/${info.name}-0x.gif`;
+        const artElementSrc = `./images/art/${info.name}/${info.name}-1x.jpg`;
+        const artElementSrcset = `
+            ./images/art/${info.name}/${info.name}-4x.jpg 4x,
+            ./images/art/${info.name}/${info.name}-3x.jpg 3x,
+            ./images/art/${info.name}/${info.name}-2x.jpg 2x,
+            ./images/art/${info.name}/${info.name}-1x.jpg 1x,
+            `;
+
+        return (
+            <div
+                aria-label={info.alt}
+                className={`art-thumb-wrapper ${info.orientation}`}
+                key={`art-thumb-wrapper-${index}`}
+                width={600}
+                height={imageHeights[info.orientation]}
+            >
+                {loading && (
+                    <img
+                        src={artElementLoadingImage}
+                        aria-hidden={true}
+                        className={`art-thumb art-thumb-loading ${info.orientation}`}
+                    />
+                )}
+
+                <img
+                    src={artElementSrc}
+                    srcSet={artElementSrcset}
+                    aria-hidden={true}
+                    className={`art-thumb ${info.orientation} ${this.state
+                        .loading && "hidden"}`}
+                    onLoad={this.onImageLoad}
+                    tabIndex={0}
+                    onClick={this.handleThumbClick}
+                    onKeyUp={this.handleThumbKeyUp}
+                />
+            </div>
+        );
+    }
+}
+
+export default class Bio extends React.Component {
+    render = () => {
+        const {currentPage} = this.props;
+        // Should we show the bio anyway? But maybe change it a little.
+        if (currentPage.focus) {
+            return;
+        }
+        const bioSections = currentPage.area === "code" ? codeBio : artBio;
+
+        // TODO: Serve up avatar the same way we do the rest of the gallery.
+        return (
+            <div className="bio">
+                <img
+                    className="bio-avatar"
+                    src="./images/icons/avatar.png"
+                    alt="Avatar for Diedra, styled as if this were the beginning of a chat conversation."
+                />
+                <div className="bio-text-wrapper">
+                    {bioSections.map((bioSection, index) => {
+                        return (
+                            <div
+                                className="bio-text-section"
+                                key={`bioSection-${index}`}
+                            >
+                                {bioSection.map((bioMessage, index) => {
+                                    return (
+                                        <div
+                                            className="bio-text-msg"
+                                            key={`bioMessage-${index}`}
+                                        >
+                                            {bioMessage}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+        );
+    };
+}

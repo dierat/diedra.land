@@ -54,7 +54,8 @@ function _inherits(subClass, superClass) {
 }
 
 import {artInfo, codeInfo} from "./gallery/gallery-image-list.js";
-import {artBio, codeBio} from "./bio.js";
+import Bio from "./bio.js";
+import GalleryImage from "./gallery/gallery-image.js";
 
 var getCurrentPage = function getCurrentPage() {
     var splitPath = window.location.pathname
@@ -71,15 +72,15 @@ var getCurrentPage = function getCurrentPage() {
     };
 };
 
-var GalleryImage = (function(_React$Component) {
-    _inherits(GalleryImage, _React$Component);
+var TopLevelWrapper = (function(_React$Component) {
+    _inherits(TopLevelWrapper, _React$Component);
 
-    function GalleryImage() {
+    function TopLevelWrapper() {
         var _ref;
 
         var _temp, _this, _ret;
 
-        _classCallCheck(this, GalleryImage);
+        _classCallCheck(this, TopLevelWrapper);
 
         for (
             var _len = arguments.length, args = Array(_len), _key = 0;
@@ -93,149 +94,14 @@ var GalleryImage = (function(_React$Component) {
             (_ret = ((_temp = ((_this = _possibleConstructorReturn(
                 this,
                 (_ref =
-                    GalleryImage.__proto__ ||
-                    Object.getPrototypeOf(GalleryImage)).call.apply(
+                    TopLevelWrapper.__proto__ ||
+                    Object.getPrototypeOf(TopLevelWrapper)).call.apply(
                     _ref,
                     [this].concat(args)
                 )
             )),
             _this)),
-            (_this._mounted = false),
             (_this.state = {
-                loading: true,
-            }),
-            (_this.componentDidMount = function() {
-                _this._mounted = true;
-            }),
-            (_this.onImageLoad = function() {
-                if (_this._mounted) {
-                    _this.setState({loading: false});
-                }
-            }),
-            (_this.handleThumbClick = function(event) {
-                event.preventDefault();
-
-                var _this$props = _this.props,
-                    handleClientNavigation = _this$props.handleClientNavigation,
-                    currentArea = _this$props.currentArea,
-                    info = _this$props.info;
-
-                _this.props.handleClientNavigation(
-                    event,
-                    "code",
-                    _this.props.info.name
-                );
-            }),
-            (_this.handleThumbKeyUp = function(event) {
-                if (event.key === "Enter" || event.key === " ") {
-                    event.preventDefault(); // Why isn't this working???
-                    _this.handleThumbClick(event);
-                }
-            }),
-            _temp)),
-            _possibleConstructorReturn(_this, _ret)
-        );
-    }
-
-    _createClass(GalleryImage, [
-        {
-            key: "render",
-            value: function render() {
-                var _props = this.props,
-                    info = _props.info,
-                    index = _props.index;
-                var loading = this.state.loading;
-
-                var artElementLoadingImage =
-                    "./images/art/" + info.name + "/" + info.name + "-0x.gif";
-                var artElementSrc =
-                    "./images/art/" + info.name + "/" + info.name + "-1x.jpg";
-                var artElementSrcset =
-                    "\n            ./images/art/" +
-                    info.name +
-                    "/" +
-                    info.name +
-                    "-4x.jpg 4x,\n            ./images/art/" +
-                    info.name +
-                    "/" +
-                    info.name +
-                    "-3x.jpg 3x,\n            ./images/art/" +
-                    info.name +
-                    "/" +
-                    info.name +
-                    "-2x.jpg 2x,\n            ./images/art/" +
-                    info.name +
-                    "/" +
-                    info.name +
-                    "-1x.jpg 1x,\n            ";
-
-                return React.createElement(
-                    "div",
-                    {
-                        "aria-label": info.alt,
-                        className: "art-thumb-wrapper " + info.orientation,
-                        key: "art-thumb-wrapper-" + index,
-                    },
-                    loading &&
-                        React.createElement("img", {
-                            src: artElementLoadingImage,
-                            "aria-hidden": true,
-                            className:
-                                "art-thumb art-thumb-loading " +
-                                info.orientation,
-                        }),
-                    React.createElement("img", {
-                        src: artElementSrc,
-                        srcSet: artElementSrcset,
-                        "aria-hidden": true,
-                        className:
-                            "art-thumb " +
-                            info.orientation +
-                            " " +
-                            (this.state.loading && "hidden"),
-                        onLoad: this.onImageLoad,
-                        tabIndex: 0,
-                        onClick: this.handleThumbClick,
-                        onKeyUp: this.handleThumbKeyUp,
-                    })
-                );
-            },
-        },
-    ]);
-
-    return GalleryImage;
-})(React.Component);
-
-var TopLevelWrapper = (function(_React$Component2) {
-    _inherits(TopLevelWrapper, _React$Component2);
-
-    function TopLevelWrapper() {
-        var _ref2;
-
-        var _temp2, _this2, _ret2;
-
-        _classCallCheck(this, TopLevelWrapper);
-
-        for (
-            var _len2 = arguments.length, args = Array(_len2), _key2 = 0;
-            _key2 < _len2;
-            _key2++
-        ) {
-            args[_key2] = arguments[_key2];
-        }
-
-        return (
-            (_ret2 = ((_temp2 = ((_this2 = _possibleConstructorReturn(
-                this,
-                (_ref2 =
-                    TopLevelWrapper.__proto__ ||
-                    Object.getPrototypeOf(TopLevelWrapper)).call.apply(
-                    _ref2,
-                    [this].concat(args)
-                )
-            )),
-            _this2)),
-            (_this2.state = {
                 // TODO: Update page title bsed on currentPage?
                 // currentPage will have the following structure:
                 // {
@@ -247,33 +113,33 @@ var TopLevelWrapper = (function(_React$Component2) {
                 // "active" in this case means focused/hovered.
                 mobileMenuButtonActive: false,
             }),
-            (_this2._mounted = false),
-            (_this2.componentDidMount = function() {
+            (_this._mounted = false),
+            (_this.componentDidMount = function() {
                 window.addEventListener("resize", function() {
-                    return _this2.handleMobileMenuToggle(false);
+                    return _this.handleMobileMenuToggle(false);
                 });
                 window.addEventListener(
                     "popstate",
-                    _this2.handleBrowserBackButtonClick
+                    _this.handleBrowserBackButtonClick
                 );
-                _this2._mounted = true;
+                _this._mounted = true;
             }),
-            (_this2.componentWillUnmount = function() {
-                _this2._mounted = false;
+            (_this.componentWillUnmount = function() {
+                _this._mounted = false;
             }),
-            (_this2.handleBrowserBackButtonClick = function() {
+            (_this.handleBrowserBackButtonClick = function() {
                 var currentPage = getCurrentPage();
 
-                if (_this2._mounted) {
-                    _this2.setState({
+                if (_this._mounted) {
+                    _this.setState({
                         currentPage: currentPage,
                     });
 
-                    _this2.handleMobileMenuToggle(false);
-                    _this2.handleMobileMenuButtonToggle(false);
+                    _this.handleMobileMenuToggle(false);
+                    _this.handleMobileMenuButtonToggle(false);
                 }
             }),
-            (_this2.handleClientNavigation = function(event, newArea) {
+            (_this.handleClientNavigation = function(event, newArea) {
                 var newFocus =
                     arguments.length > 2 && arguments[2] !== undefined
                         ? arguments[2]
@@ -281,7 +147,7 @@ var TopLevelWrapper = (function(_React$Component2) {
 
                 event.preventDefault();
 
-                var currentPage = _this2.state.currentPage;
+                var currentPage = _this.state.currentPage;
 
                 if (
                     currentPage.area === newArea &&
@@ -290,7 +156,7 @@ var TopLevelWrapper = (function(_React$Component2) {
                     return;
                 }
 
-                _this2.setState({
+                _this.setState({
                     currentPage: {
                         area: newArea,
                         focus: newFocus,
@@ -305,25 +171,25 @@ var TopLevelWrapper = (function(_React$Component2) {
                     (newFocus || "");
                 history.pushState(null, null, newLocation);
 
-                _this2.handleMobileMenuToggle(false);
-                _this2.handleMobileMenuButtonToggle(false);
+                _this.handleMobileMenuToggle(false);
+                _this.handleMobileMenuButtonToggle(false);
 
                 // TODO: Handle focus.
                 // TODO: Use aria alert to communicate that the contents of the page have changed.
             }),
-            (_this2.handleMobileMenuButtonToggle = function(nowFocused) {
-                if (_this2.state.mobileMenuButtonActive === nowFocused) {
+            (_this.handleMobileMenuButtonToggle = function(nowFocused) {
+                if (_this.state.mobileMenuButtonActive === nowFocused) {
                     return;
                 }
 
-                _this2.setState({mobileMenuButtonActive: nowFocused});
+                _this.setState({mobileMenuButtonActive: nowFocused});
             }),
-            (_this2.handleMobileMenuToggle = function(nowOpen) {
-                if (_this2.state.mobileMenuOpen === nowOpen) {
+            (_this.handleMobileMenuToggle = function(nowOpen) {
+                if (_this.state.mobileMenuOpen === nowOpen) {
                     return;
                 }
 
-                _this2.setState({mobileMenuOpen: nowOpen});
+                _this.setState({mobileMenuOpen: nowOpen});
 
                 if (nowOpen) {
                     document.body.classList.add("no-scroll");
@@ -331,42 +197,39 @@ var TopLevelWrapper = (function(_React$Component2) {
                     document.body.classList.remove("no-scroll");
                 }
             }),
-            (_this2.handleMobileMenuButtonKeyUp = function(event) {
+            (_this.handleMobileMenuButtonKeyUp = function(event) {
                 if (event.key === " " || event.key === "Enter") {
-                    _this2.handleMobileMenuToggle(!_this2.state.mobileMenuOpen);
+                    _this.handleMobileMenuToggle(!_this.state.mobileMenuOpen);
                 }
 
                 if (event.key === "Tab" && event.shiftKey) {
                     event.preventDefault();
 
-                    if (
-                        _this2.lastOverlayLink &&
-                        _this2.lastOverlayLink.focus
-                    ) {
-                        _this2.lastOverlayLink.focus();
+                    if (_this.lastOverlayLink && _this.lastOverlayLink.focus) {
+                        _this.lastOverlayLink.focus();
                     }
                 }
             }),
-            (_this2.handleLastOverlayLinkKeyDown = function(event) {
+            (_this.handleLastOverlayLinkKeyDown = function(event) {
                 if (event.key === "Tab" && !event.shiftKey) {
                     event.preventDefault();
 
                     if (
-                        _this2.mobileMenuButton &&
-                        _this2.mobileMenuButton.focus
+                        _this.mobileMenuButton &&
+                        _this.mobileMenuButton.focus
                     ) {
-                        _this2.mobileMenuButton.focus();
+                        _this.mobileMenuButton.focus();
                     }
                 }
             }),
-            (_this2.renderNavigationLinks = function(isHeader) {
-                var currentPage = _this2.state.currentPage;
+            (_this.renderNavigationLinks = function(isHeader) {
+                var currentPage = _this.state.currentPage;
 
                 var linkClassName = isHeader ? "header-link" : "overlay-link";
                 var lastLinkRef = isHeader
                     ? null
                     : function(node) {
-                          return (_this2.lastOverlayLink = node);
+                          return (_this.lastOverlayLink = node);
                       };
 
                 // TODO: Should these be buttons? They look like links but they don't go anywhere.
@@ -382,7 +245,7 @@ var TopLevelWrapper = (function(_React$Component2) {
                                 className: linkClassName,
                                 href: "",
                                 onClick: function onClick(event) {
-                                    return _this2.handleClientNavigation(
+                                    return _this.handleClientNavigation(
                                         event,
                                         "code"
                                     );
@@ -398,7 +261,7 @@ var TopLevelWrapper = (function(_React$Component2) {
                                 className: linkClassName,
                                 href: "",
                                 onClick: function onClick(event) {
-                                    return _this2.handleClientNavigation(
+                                    return _this.handleClientNavigation(
                                         event,
                                         "art"
                                     );
@@ -430,63 +293,17 @@ var TopLevelWrapper = (function(_React$Component2) {
                                 "https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=diedrarater@protonmail.com",
                             onKeyDown: isHeader
                                 ? null
-                                : _this2.handleLastOverlayLinkKeyDown,
+                                : _this.handleLastOverlayLinkKeyDown,
                             ref: lastLinkRef,
                         },
                         "Contact"
                     )
                 );
             }),
-            (_this2.renderBio = function() {
-                var currentPage = _this2.state.currentPage;
-                // Should we show the bio anyway? But maybe change it a little.
-
-                if (currentPage.focus) {
-                    return;
-                }
-                var bioSections =
-                    currentPage.area === "code" ? codeBio : artBio;
-
-                // TODO: Serve up avatar the same way we do the rest of the gallery.
-                return React.createElement(
-                    "div",
-                    {className: "bio"},
-                    React.createElement("img", {
-                        className: "bio-avatar",
-                        src: "./images/icons/avatar.png",
-                        alt:
-                            "Avatar for Diedra, styled as if this were the beginning of a chat conversation.",
-                    }),
-                    React.createElement(
-                        "div",
-                        {className: "bio-text-wrapper"},
-                        bioSections.map(function(bioSection, index) {
-                            return React.createElement(
-                                "div",
-                                {
-                                    className: "bio-text-section",
-                                    key: "bioSection-" + index,
-                                },
-                                bioSection.map(function(bioMessage, index) {
-                                    return React.createElement(
-                                        "div",
-                                        {
-                                            className: "bio-text-msg",
-                                            key: "bioMessage-" + index,
-                                        },
-                                        bioMessage
-                                    );
-                                })
-                            );
-                        })
-                    )
-                );
-            }),
-            (_this2.renderHeader = function() {
-                var _this2$state = _this2.state,
-                    mobileMenuButtonActive =
-                        _this2$state.mobileMenuButtonActive,
-                    mobileMenuOpen = _this2$state.mobileMenuOpen;
+            (_this.renderHeader = function() {
+                var _this$state = _this.state,
+                    mobileMenuButtonActive = _this$state.mobileMenuButtonActive,
+                    mobileMenuOpen = _this$state.mobileMenuOpen;
 
                 return React.createElement(
                     "header",
@@ -518,40 +335,40 @@ var TopLevelWrapper = (function(_React$Component2) {
                                 "\xA0\xA0|\xA0\xA0Programmer & Artist"
                             )
                         ),
-                        _this2.renderNavigationLinks(true),
+                        _this.renderNavigationLinks(true),
                         React.createElement(
                             "button",
                             {
                                 id: "header-menu-button",
                                 ref: function ref(node) {
-                                    return (_this2.mobileMenuButton = node);
+                                    return (_this.mobileMenuButton = node);
                                 },
                                 "aria-label": mobileMenuOpen
                                     ? "Close navigation menu"
                                     : "Open navigation menu",
                                 onClick: function onClick() {
-                                    return _this2.handleMobileMenuToggle(
+                                    return _this.handleMobileMenuToggle(
                                         !mobileMenuOpen
                                     );
                                 },
-                                onKeyUp: _this2.handleMobileMenuButtonKeyUp,
+                                onKeyUp: _this.handleMobileMenuButtonKeyUp,
                                 onMouseEnter: function onMouseEnter() {
-                                    return _this2.handleMobileMenuButtonToggle(
+                                    return _this.handleMobileMenuButtonToggle(
                                         true
                                     );
                                 },
                                 onFocus: function onFocus() {
-                                    return _this2.handleMobileMenuButtonToggle(
+                                    return _this.handleMobileMenuButtonToggle(
                                         true
                                     );
                                 },
                                 onMouseLeave: function onMouseLeave() {
-                                    return _this2.handleMobileMenuButtonToggle(
+                                    return _this.handleMobileMenuButtonToggle(
                                         false
                                     );
                                 },
                                 onBlur: function onBlur() {
-                                    return _this2.handleMobileMenuButtonToggle(
+                                    return _this.handleMobileMenuButtonToggle(
                                         false
                                     );
                                 },
@@ -579,8 +396,8 @@ var TopLevelWrapper = (function(_React$Component2) {
                     )
                 );
             }),
-            (_this2.renderGalleryPage = function() {
-                var currentPage = _this2.state.currentPage;
+            (_this.renderGalleryPage = function() {
+                var currentPage = _this.state.currentPage;
 
                 var infoList = null;
                 if (currentPage.area === "code") {
@@ -601,17 +418,17 @@ var TopLevelWrapper = (function(_React$Component2) {
                             index: index,
                             key: "gallery-image-" + index,
                             handleClientNavigation:
-                                _this2.handleClientNavigation,
+                                _this.handleClientNavigation,
                             currentArea: currentPage.area,
                         });
                     })
                 );
             }),
-            (_this2.renderFocusPage = function() {
+            (_this.renderFocusPage = function() {
                 return;
             }),
-            _temp2)),
-            _possibleConstructorReturn(_this2, _ret2)
+            _temp)),
+            _possibleConstructorReturn(_this, _ret)
         );
     }
 
@@ -641,7 +458,7 @@ var TopLevelWrapper = (function(_React$Component2) {
                     React.createElement(
                         "div",
                         {id: "main-content"},
-                        this.renderBio(),
+                        React.createElement(Bio, {currentPage: currentPage}),
                         currentPage.focus
                             ? this.renderFocusPage()
                             : this.renderGalleryPage()

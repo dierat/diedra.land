@@ -100,6 +100,26 @@ var GalleryImage = (function(_React$Component) {
                     _this.setState({loading: false});
                 }
             }),
+            (_this.handleThumbClick = function(event) {
+                event.preventDefault();
+
+                var _this$props = _this.props,
+                    handleClientNavigation = _this$props.handleClientNavigation,
+                    currentArea = _this$props.currentArea,
+                    info = _this$props.info;
+
+                _this.props.handleClientNavigation(
+                    event,
+                    "code",
+                    _this.props.info.name
+                );
+            }),
+            (_this.handleThumbKeyUp = function(event) {
+                if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault(); // Why isn't this working???
+                    _this.handleThumbClick(event);
+                }
+            }),
             _temp)),
             _possibleConstructorReturn(_this, _ret)
         );
@@ -164,6 +184,9 @@ var GalleryImage = (function(_React$Component) {
                             " " +
                             (this.state.loading && "hidden"),
                         onLoad: this.onImageLoad,
+                        tabIndex: 0,
+                        onClick: this.handleThumbClick,
+                        onKeyUp: this.handleThumbKeyUp,
                     })
                 );
             },

@@ -21,6 +21,21 @@ export default class GalleryImage extends React.Component {
         }
     };
 
+    handleThumbClick = event => {
+        event.preventDefault();
+
+        const {handleClientNavigation, currentArea, info} = this.props;
+
+        this.props.handleClientNavigation(event, "code", this.props.info.name);
+    };
+
+    handleThumbKeyUp = event => {
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault(); // Why isn't this working???
+            this.handleThumbClick(event);
+        }
+    };
+
     render() {
         const {info, index} = this.props;
         const {loading} = this.state;
@@ -57,6 +72,9 @@ export default class GalleryImage extends React.Component {
                     className={`art-thumb ${info.orientation} ${this.state
                         .loading && "hidden"}`}
                     onLoad={this.onImageLoad}
+                    tabIndex={0}
+                    onClick={this.handleThumbClick}
+                    onKeyUp={this.handleThumbKeyUp}
                 />
             </div>
         );
