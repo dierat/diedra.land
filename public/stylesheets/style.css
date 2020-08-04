@@ -320,6 +320,7 @@ nav {
     .art-thumb {
         border: 2px solid #bebebe;
         border-radius: 10px;
+        cursor: pointer;
     }
 
     .art-thumb.vertical {
@@ -341,7 +342,6 @@ nav {
 .art-thumb-wrapper {
     margin: 10px;
     position: relative;
-    cursor: pointer;
 }
 
 .art-thumb-wrapper.square,
@@ -358,11 +358,14 @@ nav {
     } */
 
     .art-thumb:hover,
-    .art-thumb:focus {
+    .art-thumb:focus,
+    .art-thumb:active {
         transform: scale(1.01);
         border: 2px solid #c400eb;
         transition: none;
         filter: drop-shadow(5px 5px 2px #b8a1bd);
+        outline: none;
+        outline: 0;
     }
 }
 
