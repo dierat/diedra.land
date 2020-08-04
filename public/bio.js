@@ -59,45 +59,12 @@ var BioAvatar = (function(_React$Component) {
     _inherits(BioAvatar, _React$Component);
 
     function BioAvatar() {
-        var _ref;
-
-        var _temp, _this, _ret;
-
         _classCallCheck(this, BioAvatar);
 
-        for (
-            var _len = arguments.length, args = Array(_len), _key = 0;
-            _key < _len;
-            _key++
-        ) {
-            args[_key] = arguments[_key];
-        }
-
-        return (
-            (_ret = ((_temp = ((_this = _possibleConstructorReturn(
-                this,
-                (_ref =
-                    BioAvatar.__proto__ ||
-                    Object.getPrototypeOf(BioAvatar)).call.apply(
-                    _ref,
-                    [this].concat(args)
-                )
-            )),
-            _this)),
-            (_this._mounted = false),
-            (_this.state = {
-                loading: true,
-            }),
-            (_this.componentDidMount = function() {
-                _this._mounted = true;
-            }),
-            (_this.onImageLoad = function() {
-                if (_this._mounted) {
-                    _this.setState({loading: false});
-                }
-            }),
-            _temp)),
-            _possibleConstructorReturn(_this, _ret)
+        return _possibleConstructorReturn(
+            this,
+            (BioAvatar.__proto__ || Object.getPrototypeOf(BioAvatar))
+                .apply(this, arguments)
         );
     }
 
@@ -105,64 +72,30 @@ var BioAvatar = (function(_React$Component) {
         {
             key: "render",
             value: function render() {
-                var _props = this.props,
-                    info = _props.info,
-                    index = _props.index;
-                var loading = this.state.loading;
-
-                var artElementLoadingImage =
-                    "./images/art/" + info.name + "/" + info.name + "-0x.gif";
-                var artElementSrc =
-                    "./images/art/" + info.name + "/" + info.name + "-1x.jpg";
-                var artElementSrcset =
-                    "\n            ./images/art/" +
-                    info.name +
-                    "/" +
-                    info.name +
-                    "-4x.jpg 4x,\n            ./images/art/" +
-                    info.name +
-                    "/" +
-                    info.name +
-                    "-3x.jpg 3x,\n            ./images/art/" +
-                    info.name +
-                    "/" +
-                    info.name +
-                    "-2x.jpg 2x,\n            ./images/art/" +
-                    info.name +
-                    "/" +
-                    info.name +
-                    "-1x.jpg 1x,\n            ";
+                var mobileSrc = "./images/icons/avatar-0x.jpg";
+                var mobileSrcset =
+                    "\n            ./images/icons/avatar-4x.jpg 3x,\n            ./images/icons/avatar-3x.jpg 2x,\n            ./images/icons/avatar-2x.jpg 1x,\n            ./images/icons/avatar-1x.jpg 0x,\n            ";
+                var desktopSrc = "./images/icons/avatar-1x.jpg";
+                var desktopSrcset =
+                    "\n            ./images/icons/avatar-4x.jpg 4x,\n            ./images/icons/avatar-3x.jpg 3x,\n            ./images/icons/avatar-2x.jpg 2x,\n            ./images/icons/avatar-1x.jpg 1x,\n            ";
 
                 return React.createElement(
                     "div",
                     {
-                        "aria-label": info.alt,
-                        className: "art-thumb-wrapper " + info.orientation,
-                        key: "art-thumb-wrapper-" + index,
-                        width: 600,
-                        height: imageHeights[info.orientation],
+                        "aria-label":
+                            "Avatar for Diedra, styled as if this were the beginning of a chat conversation.",
                     },
-                    loading &&
-                        React.createElement("img", {
-                            src: artElementLoadingImage,
-                            "aria-hidden": true,
-                            className:
-                                "art-thumb art-thumb-loading " +
-                                info.orientation,
-                        }),
                     React.createElement("img", {
-                        src: artElementSrc,
-                        srcSet: artElementSrcset,
+                        src: mobileSrc,
+                        srcSet: mobileSrcset,
                         "aria-hidden": true,
-                        className:
-                            "art-thumb " +
-                            info.orientation +
-                            " " +
-                            (this.state.loading && "hidden"),
-                        onLoad: this.onImageLoad,
-                        tabIndex: 0,
-                        onClick: this.handleThumbClick,
-                        onKeyUp: this.handleThumbKeyUp,
+                        className: "bio-avatar mobile",
+                    }),
+                    React.createElement("img", {
+                        src: desktopSrc,
+                        srcSet: desktopSrcset,
+                        "aria-hidden": true,
+                        className: "bio-avatar desktop",
                     })
                 );
             },
@@ -176,26 +109,25 @@ var Bio = (function(_React$Component2) {
     _inherits(Bio, _React$Component2);
 
     function Bio() {
-        var _ref2;
+        var _ref;
 
-        var _temp2, _this2, _ret2;
+        var _temp, _this2, _ret;
 
         _classCallCheck(this, Bio);
 
         for (
-            var _len2 = arguments.length, args = Array(_len2), _key2 = 0;
-            _key2 < _len2;
-            _key2++
+            var _len = arguments.length, args = Array(_len), _key = 0;
+            _key < _len;
+            _key++
         ) {
-            args[_key2] = arguments[_key2];
+            args[_key] = arguments[_key];
         }
 
         return (
-            (_ret2 = ((_temp2 = ((_this2 = _possibleConstructorReturn(
+            (_ret = ((_temp = ((_this2 = _possibleConstructorReturn(
                 this,
-                (_ref2 =
-                    Bio.__proto__ || Object.getPrototypeOf(Bio)).call.apply(
-                    _ref2,
+                (_ref = Bio.__proto__ || Object.getPrototypeOf(Bio)).call.apply(
+                    _ref,
                     [this].concat(args)
                 )
             )),
@@ -214,12 +146,7 @@ var Bio = (function(_React$Component2) {
                 return React.createElement(
                     "div",
                     {className: "bio"},
-                    React.createElement("img", {
-                        className: "bio-avatar",
-                        src: "./images/icons/avatar.png",
-                        alt:
-                            "Avatar for Diedra, styled as if this were the beginning of a chat conversation.",
-                    }),
+                    React.createElement(BioAvatar, null),
                     React.createElement(
                         "div",
                         {className: "bio-text-wrapper"},
@@ -245,8 +172,8 @@ var Bio = (function(_React$Component2) {
                     )
                 );
             }),
-            _temp2)),
-            _possibleConstructorReturn(_this2, _ret2)
+            _temp)),
+            _possibleConstructorReturn(_this2, _ret)
         );
     }
 

@@ -182,7 +182,7 @@ var GalleryImage = (function(_React$Component) {
                             "art-thumb " +
                             info.orientation +
                             " " +
-                            (this.state.loading && "hidden"),
+                            (loading && "hidden"),
                         onLoad: this.onImageLoad,
                         tabIndex: 0,
                         onClick: this.handleThumbClick,

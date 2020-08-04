@@ -1,61 +1,40 @@
 import {artBio, codeBio} from "./bio-info.js";
 
 class BioAvatar extends React.Component {
-    _mounted = false;
-
-    state = {
-        loading: true,
-    };
-
-    componentDidMount = () => {
-        this._mounted = true;
-    };
-
-    onImageLoad = () => {
-        if (this._mounted) {
-            this.setState({loading: false});
-        }
-    };
-
     render() {
-        const {info, index} = this.props;
-        const {loading} = this.state;
-
-        const artElementLoadingImage = `./images/art/${info.name}/${info.name}-0x.gif`;
-        const artElementSrc = `./images/art/${info.name}/${info.name}-1x.jpg`;
-        const artElementSrcset = `
-            ./images/art/${info.name}/${info.name}-4x.jpg 4x,
-            ./images/art/${info.name}/${info.name}-3x.jpg 3x,
-            ./images/art/${info.name}/${info.name}-2x.jpg 2x,
-            ./images/art/${info.name}/${info.name}-1x.jpg 1x,
+        const mobileSrc = `./images/icons/avatar-0x.jpg`;
+        const mobileSrcset = `
+            ./images/icons/avatar-4x.jpg 3x,
+            ./images/icons/avatar-3x.jpg 2x,
+            ./images/icons/avatar-2x.jpg 1x,
+            ./images/icons/avatar-1x.jpg 0x,
+            `;
+        const desktopSrc = `./images/icons/avatar-1x.jpg`;
+        const desktopSrcset = `
+            ./images/icons/avatar-4x.jpg 4x,
+            ./images/icons/avatar-3x.jpg 3x,
+            ./images/icons/avatar-2x.jpg 2x,
+            ./images/icons/avatar-1x.jpg 1x,
             `;
 
         return (
             <div
-                aria-label={info.alt}
-                className={`art-thumb-wrapper ${info.orientation}`}
-                key={`art-thumb-wrapper-${index}`}
-                width={600}
-                height={imageHeights[info.orientation]}
+                aria-label={
+                    "Avatar for Diedra, styled as if this were the beginning of a chat conversation."
+                }
             >
-                {loading && (
-                    <img
-                        src={artElementLoadingImage}
-                        aria-hidden={true}
-                        className={`art-thumb art-thumb-loading ${info.orientation}`}
-                    />
-                )}
+                <img
+                    src={mobileSrc}
+                    srcSet={mobileSrcset}
+                    aria-hidden={true}
+                    className={"bio-avatar mobile"}
+                />
 
                 <img
-                    src={artElementSrc}
-                    srcSet={artElementSrcset}
+                    src={desktopSrc}
+                    srcSet={desktopSrcset}
                     aria-hidden={true}
-                    className={`art-thumb ${info.orientation} ${this.state
-                        .loading && "hidden"}`}
-                    onLoad={this.onImageLoad}
-                    tabIndex={0}
-                    onClick={this.handleThumbClick}
-                    onKeyUp={this.handleThumbKeyUp}
+                    className={"bio-avatar desktop"}
                 />
             </div>
         );
@@ -74,11 +53,8 @@ export default class Bio extends React.Component {
         // TODO: Serve up avatar the same way we do the rest of the gallery.
         return (
             <div className="bio">
-                <img
-                    className="bio-avatar"
-                    src="./images/icons/avatar.png"
-                    alt="Avatar for Diedra, styled as if this were the beginning of a chat conversation."
-                />
+                <BioAvatar />
+
                 <div className="bio-text-wrapper">
                     {bioSections.map((bioSection, index) => {
                         return (

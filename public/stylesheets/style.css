@@ -45,6 +45,18 @@ body.no-scroll {
     overflow: hidden;
 }
 
+@media only screen and (min-width: 601px) {
+    .mobile {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .desktop {
+        display: none;
+    }
+}
+
 /**
  * All links styles.
  */
@@ -236,15 +248,15 @@ nav {
     height: 80px;
 }
 
+.bio-avatar.mobile {
+    width: 40px;
+    height: 40px;
+}
+
 @media only screen and (max-width: 600px) {
     .bio {
         margin-top: 80px;
         padding: 5px;
-    }
-
-    .bio-avatar {
-        width: 40px;
-        height: 40px;
     }
 }
 
@@ -302,7 +314,7 @@ nav {
 }
 
 .art-thumb-loading {
-    filter: blur(40px);
+    filter: blur(20px);
     position: absolute;
 }
 
@@ -312,7 +324,7 @@ nav {
        While the image has loaded, we remove the loading thumb from the page
        and we remove the hidden className from the high res thumb. We transition the filter
        on this thumb when this className is removed to soften the switch. */
-    filter: blur(40px);
+    filter: blur(20px);
 }
 
 /* These constraints mess up mobile. */
